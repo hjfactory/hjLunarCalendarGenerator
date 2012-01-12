@@ -3,7 +3,7 @@ unit LunarCalendarDataGenerate;
 interface
 
 uses
-  CalendarDataGenerate, CommonType;
+  hjLunarDateConverter, CalendarDataGenerate, CommonType;
 
 type
   TLunarCalendarSource = class(TCalendarSource)
@@ -13,16 +13,11 @@ type
 
   TLunarCalendarDataGenerate = class(TCalendarDataGenerate)
   private
-    FDisplayType: Integer;
-  published
+    FCurrentDate: TSolarDateRec;
+  protected
+    procedure initialize; overload;
   public
-    constructor Create;
-    destructor Destroy; override;
-
-    function HasNext: Boolean; override;
     function Next: TCalendarData; override;
-
-    property DisplayType: Integer read FDisplayType write FDisplayType;
   end;
 
 implementation
@@ -36,24 +31,14 @@ end;
 
 { TLunarCalendarDataGenerate }
 
-constructor TLunarCalendarDataGenerate.Create;
+procedure TLunarCalendarDataGenerate.initialize;
 begin
-
-end;
-
-destructor TLunarCalendarDataGenerate.Destroy;
-begin
-  inherited;
-end;
-
-function TLunarCalendarDataGenerate.HasNext: Boolean;
-begin
-
+  FCurrentDate := DateRec(FStartOfRange, 1, 1);
 end;
 
 function TLunarCalendarDataGenerate.Next: TCalendarData;
 begin
-
+  Result := nil;
 end;
 
 end.

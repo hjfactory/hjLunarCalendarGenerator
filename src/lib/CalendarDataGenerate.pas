@@ -26,23 +26,23 @@ type
   end;
 
   TCalendarDataGenerate = class(TObject)
-  private
-    FStartYear: Word;
-    FEndYear: Word;
   protected
+    FStartOfRange: Word;
+    FEndOfRange: Word;
+
     FCalendarData: TCalendarData;
     FCalendarSource: TCalendarSource;
     FLunarDateConvertor: ThjLunarDateConverter;
-  published
+
+    procedure Initialize; virtual;
   public
-    constructor Create(ASource: TCalendarSource);
+    constructor Create(ASource: TCalendarSource; AStartOfRange, AEndOfRange: Word);
     destructor Destroy; override;
 
-    function HasNext: Boolean; virtual; abstract;
     function Next: TCalendarData; virtual; abstract;
 
-    property StartYear: Word read FStartYear write FStartYear;
-    property EndYear: Word read FEndYear write FEndYear;
+    property StartOfRange: Word read FStartOfRange;
+    property EndOfRange: Word read FEndOfRange;
   end;
 
 implementation
@@ -60,10 +60,13 @@ end;
 
 { TCalendarDataGenerate }
 
-constructor TCalendarDataGenerate.Create(ASource: TCalendarSource);
+constructor TCalendarDataGenerate.Create(ASource: TCalendarSource; AStartOfRange, AEndOfRange: Word);
 begin
   FCalendarData   := TCalendarData.Create;
   FCalendarSource := ASource;
+
+  FStartOfRange := AStartOfRange;
+  FEndOfRange   := AEndOfRange;
 end;
 
 destructor TCalendarDataGenerate.Destroy;
@@ -71,6 +74,11 @@ begin
   FCalendarData.Free;
 
   inherited;
+end;
+
+procedure TCalendarDataGenerate.Initialize;
+begin
+
 end;
 
 end.
