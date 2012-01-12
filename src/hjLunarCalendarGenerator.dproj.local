@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<BorlandProject>
+	<Transactions>
+    <Transaction>2011-12-23 12:33:39.809.pas,C:\Users\hjFactory\Documents\RAD Studio\Projects\Unit2.pas=E:\hjFactory\hjLunarCalculator\src\Main.pas</Transaction>
+    <Transaction>2011-12-23 12:33:39.809.dfm,C:\Users\hjFactory\Documents\RAD Studio\Projects\Unit2.dfm=E:\hjFactory\hjLunarCalculator\src\Main.dfm</Transaction>
+    <Transaction>2011-12-23 12:33:52.918.dproj,C:\Users\hjFactory\Documents\RAD Studio\Projects\Project1.dproj=E:\hjFactory\hjLunarCalculator\src\hjLunarCalculator.dproj</Transaction>
+    <Transaction>2011-12-23 12:35:25.939.pas,E:\hjFactory\hjLunarCalculator\src\Unit1.pas=E:\hjFactory\hjLunarCalculator\src\lib\MainController.pas</Transaction>
+    <Transaction>2011-12-23 12:35:54.708.pas,E:\hjFactory\hjLunarCalculator\src\Unit1.pas=E:\hjFactory\hjLunarCalculator\src\lib\hjLunarCalculator.pas</Transaction>
+    <Transaction>2011-12-23 12:38:11.108.dproj,E:\hjFactory\hjLunarCalculator\src\hjLunarCalculator.dproj=E:\hjFactory\hjLunarCalculator\src\hjLunarCalc.dproj</Transaction>
+    <Transaction>2011-12-27 16:14:57.478.pas,E:\hjFactory\hjLunarCalculator\src\Unit1.pas=E:\hjFactory\hjLunarCalculator\src\lib\CommonType.pas</Transaction>
+    <Transaction>2012-01-12 10:59:14.057.pas,E:\hjFactory\hjLunarCalculator\src\lib\hjLunarCalculator.pas=E:\hjFactory\hjLunarCalculator\src\lib\hjLunarDateConverter.pas</Transaction>
+    <Transaction>2012-01-12 11:14:03.480.pas,E:\hjFactory\hjLunarCalculator\src\Unit1.pas=E:\hjFactory\hjLunarCalculator\src\lib\LunarCalendarGenerate.pas</Transaction>
+    <Transaction>2012-01-12 11:17:58.419.dproj,E:\hjFactory\hjLunarCalculator\src\hjLunarCalc.dproj=E:\hjFactory\hjLunarCalculator\src\hjLunarCalendarGenerator.dproj</Transaction>
+  </Transactions>
+</BorlandProject>
