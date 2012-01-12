@@ -52,7 +52,8 @@
 			<DCCReference Include="lib\MainController.pas"/>
 			<DCCReference Include="lib\hjLunarDateConverter.pas"/>
 			<DCCReference Include="lib\CommonType.pas"/>
-			<DCCReference Include="lib\LunarCalendarGenerate.pas"/>
+			<DCCReference Include="lib\LunarCalendarDataGenerate.pas"/>
+			<DCCReference Include="lib\CalendarDataGenerate.pas"/>
 			<None Include="lib\LunarTableData.inc"/>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>

@@ -7,7 +7,8 @@ uses
   MainController in 'lib\MainController.pas',
   hjLunarDateConverter in 'lib\hjLunarDateConverter.pas',
   CommonType in 'lib\CommonType.pas',
-  LunarCalendarGenerate in 'lib\LunarCalendarGenerate.pas';
+  LunarCalendarDataGenerate in 'lib\LunarCalendarDataGenerate.pas',
+  CalendarDataGenerate in 'lib\CalendarDataGenerate.pas';
 
 {$R *.res}
 
