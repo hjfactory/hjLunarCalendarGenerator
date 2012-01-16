@@ -15,10 +15,11 @@ const
   DISP_DAYS_15DAY   = 130;  // 1, 15, 29(30)
   DISP_DAYS_KOR     = 200;  // 정월, 보름, 그믐
 
-  Days5Day: array[0..5] of Word = (1, 5, 10, 20, 25, 30);
-  Days10Day: array[0..3] of Word = (1, 10, 20, 30);
-  Days15Day: array[0..2] of Word = (1, 15, 30);
-  DaysKor: array[0..2] of Word = (1, 15, 30);
+  // 99 is last day
+  Days5Day: array[0..5] of Word = (1, 5, 10, 20, 25, 99);
+  Days10Day: array[0..3] of Word = (1, 10, 20, 99);
+  Days15Day: array[0..2] of Word = (1, 15, 99);
+  DaysKor: array[0..2] of Word = (1, 15, 99);
 
   // 한국 달이름
   LunarKoreanMonthName: array[1..12] of string = (

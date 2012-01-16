@@ -32,6 +32,8 @@ type
     function SolarToLunar(ADate: TSolarDateRec): TLunarDateRec;
     function LunarToSolar(ADate: TLunarDateRec): TSolarDateRec;
 
+    function GetLunarDaysOfMonth(AYear, AMonth: Word; AIsLeapMonth: Boolean): Word;
+
     function GetSupportSolarPriod: string;
     function GetSupportLunarPriod: string;
   end;
@@ -387,6 +389,38 @@ begin
   end;
   OutputDebugString(PChar('Correct Table data'));
 end;
+
+// 음력 달의 마지막 날을 반환한다.
+function ThjLunarDateConverter.GetLunarDaysOfMonth(AYear, AMonth: Word;
+  AIsLeapMonth: Boolean): Word;
+var
+  MonthTable: string;
+  I, MonthIndex: Integer;
+begin
+  Result := 0;
+  MonthTable := LunarMonthTable[AYear - SupportYearStart];
+
+  MonthIndex := AMonth;
+  // 요청달의 이전에 윤달이 있으면 Index 증가
+  for I := 1 to AMonth do
+  begin
+    if CharInSet(MonthTable[I], ['3', '4']) then
+      Inc(MonthIndex);
+  end;
+
+  // 윤달요청 경우 예외
+  if AIsLeapMonth then
+  begin
+    Inc(MonthIndex);
+    // 실제 윤달이 아니면 종료
+    if not CharInSet(MonthTable[MonthIndex], ['3', '4']) then
+      Exit;
+    Result := IfThen(MonthTable[MonthIndex] = '3', 29, 30);
+  end;
+
+  Result := IfThen(MonthTable[MonthIndex] = '1', 29, 30);
+end;
+
 
 end.
 

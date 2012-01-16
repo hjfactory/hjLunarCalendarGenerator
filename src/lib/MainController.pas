@@ -58,7 +58,6 @@ procedure TMainController.test(A, B, C: Word);
 var
   R1: TLunarDateRec;
   R: TSolarDateRec;
-  D: TCalendarData;
 begin
   try
     R1 :=FLunarCalc.SolarToLunar(DateRec(A, B, C));

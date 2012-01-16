@@ -1,7 +1,6 @@
 program hjLunarCalendarGenerator;
 
 uses
-  ExceptionLog,
   Forms,
   Main in 'Main.pas' {Form2},
   MainController in 'lib\MainController.pas',

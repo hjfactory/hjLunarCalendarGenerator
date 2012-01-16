@@ -23,6 +23,10 @@ type
 
   // 달력데이터를 만들기 위한 정보
   TCalendarSource = class(TObject)
+  protected
+    procedure First; virtual; abstract;
+    function Next: Boolean; virtual; abstract;
+    function Day: Word; virtual; abstract;
   end;
 
   TCalendarDataGenerate = class(TObject)
