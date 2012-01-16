@@ -62,6 +62,12 @@ end;
 
 procedure TLunarCalendarDataGenerate.initialize;
 begin
+end;
+
+{ TLunarCalendarDataGenerate }
+
+procedure TLunarCalendarDataGenerate.initialize;
+begin
   FCurrentDate := DateRec(FStartOfRange, 1, 1);
 end;
 
