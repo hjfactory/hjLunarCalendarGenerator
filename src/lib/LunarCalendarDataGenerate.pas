@@ -3,7 +3,7 @@ unit LunarCalendarDataGenerate;
 interface
 
 uses
-  hjLunarDateConverter, CalendarDataGenerate, CommonType;
+  hjLunarDateType ,hjLunarDateConverter, CalendarDataGenerate, CommonType;
 
 type
   TLunarCalendarSource = class(TCalendarSource)

@@ -47,13 +47,14 @@
 				<MainSource>MainSource</MainSource>
 			</DelphiCompile>
 			<DCCReference Include="Main.pas">
-				<Form>Form2</Form>
+				<Form>frmMain</Form>
 			</DCCReference>
 			<DCCReference Include="lib\MainController.pas"/>
 			<DCCReference Include="lib\hjLunarDateConverter.pas"/>
 			<DCCReference Include="lib\CommonType.pas"/>
 			<DCCReference Include="lib\LunarCalendarDataGenerate.pas"/>
 			<DCCReference Include="lib\CalendarDataGenerate.pas"/>
+			<DCCReference Include="lib\hjLunarDateType.pas"/>
 			<None Include="lib\LunarTableData.inc"/>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>

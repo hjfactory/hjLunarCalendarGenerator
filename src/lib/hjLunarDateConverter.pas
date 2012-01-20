@@ -3,19 +3,10 @@ unit hjLunarDateConverter;
 interface
 
 uses
-  Windows, Classes, SysUtils;
+  Windows, Classes, SysUtils, hjLunarDateType;
 
 type
   ERangeError = class(Exception);
-
-  TSolarDateRec = record
-    Year, Month, Day: Word;
-  end;
-
-  TLunarDateRec = record
-    Year, Month, Day: Word;
-    IsLeapMonth: Boolean;
-  end;
 
   ThjLunarDateConverter = class(TObject)
   private
@@ -38,30 +29,12 @@ type
     function GetSupportLunarPriod: string;
   end;
 
-  function DateRec(AYear, AMonth, ADay: Word): TSolarDateRec; overload;
-  function DateRec(AYear, AMonth, ADay: Word; AIsLeapMonth: Boolean): TLunarDateRec; overload;
-
 implementation
 
 uses
   Math, DateUtils, CommonType;
 
 {$include LunarTableData.inc}
-
-function DateRec(AYear, AMonth, ADay: Word): TSolarDateRec;
-begin
-  Result.Year   := AYear;
-  Result.Month  := AMonth;
-  Result.Day    := ADay;
-end;
-
-function DateRec(AYear, AMonth, ADay: Word; AIsLeapMonth: Boolean): TLunarDateRec;
-begin
-  Result.Year         := AYear;
-  Result.Month        := AMonth;
-  Result.Day          := ADay;
-  Result.IsLeapMonth  := AIsLeapMonth;
-end;
 
 
 { ThjLunarCalculator }
@@ -131,11 +104,12 @@ var
   MonthIndex: Integer;
   DaysOfMonth: Integer;
 begin
-  ErrMsg := Format('유효범위를 벗어 났습니다.(음력지원 일자: %0:d-01-01~%1:d-12-31)', [SupportYearStart, SupportYearEnd]);
-
   // ### 연도 범위 오류
   if (ADate.Year < SupportYearStart) or (ADate.Year > SupportYearEnd) then
+  begin
+    ErrMsg := Format('유효범위를 벗어 났습니다.(음력지원 일자: %0:d-01-01~%1:d-12-31)', [SupportYearStart, SupportYearEnd]);
     RangeError(ErrMsg);
+  end;
 
   // ### 월 범위 오류
   if (ADate.Month < 1) or (ADate.Month > 12) then

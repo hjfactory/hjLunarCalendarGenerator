@@ -14,5 +14,6 @@
     <Transaction>2012-01-12 11:59:05.286.pas,E:\hjFactory\hjLunarCalendarGenerator\src\Unit1.pas=E:\hjFactory\hjLunarCalendarGenerator\src\lib\CanlendarDataGenerate.pas</Transaction>
     <Transaction>2012-01-12 11:59:25.293.pas,E:\hjFactory\hjLunarCalendarGenerator\src\lib\LunarCalendarGenerate.pas=E:\hjFactory\hjLunarCalendarGenerator\src\lib\LunarCalendarDataGenerate.pas</Transaction>
     <Transaction>2012-01-12 19:28:26.553.pas,E:\hjFactory\hjLunarCalendarGenerator\src\lib\CanlendarDataGenerate.pas=E:\hjFactory\hjLunarCalendarGenerator\src\lib\CalendarDataGenerate.pas</Transaction>
+    <Transaction>2012-01-20 19:39:16.275.pas,E:\hjFactory\hjLunarCalendarGenerator\src\Unit1.pas=E:\hjFactory\hjLunarCalendarGenerator\src\lib\hjLunarDateType.pas</Transaction>
   </Transactions>
 </BorlandProject>

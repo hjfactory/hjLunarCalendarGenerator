@@ -1,6 +1,7 @@
 {
-  기념일은 INI파일로 저장한다.
-  음력달력 데이터는
+  1, 음력 양력 변경
+  2, 달력 생성
+  3, 기념일 관리 기능
 }
 
 unit MainController;
@@ -8,12 +9,13 @@ unit MainController;
 interface
 
 uses
-  hjLunarDateConverter, Classes, Windows, SysUtils,
+  hjLunarDateType, hjLunarDateConverter, Classes, Windows, SysUtils,
   CalendarDataGenerate;
 
 type
   TMainController = class(TObject)
   private
+    FLunDataConv: ThjLunarDateConverter;
     FCalendarDataGenerator: TCalendarDataGenerate;
   public
     constructor Create;
@@ -34,24 +36,32 @@ uses
 
 constructor TMainController.Create;
 begin
-//  FLunarCalc := ThjLunarDateConverter.Create;
+  FLunDataConv := ThjLunarDateConverter.Create;
 end;
 
 destructor TMainController.Destroy;
 begin
-//  FLunarCalc.Free;
+  FLunDataConv.Free;
 
   inherited;
 end;
 
 function TMainController.LunarToSolar(ADate: TLunarDateRec): TSolarDateRec;
 begin
-
+  try
+    Result := FLunDataConv.LunarToSolar(ADate);
+  except
+    raise
+  end;
 end;
 
 function TMainController.SolarToLunar(ADate: TSolarDateRec): TLunarDateRec;
 begin
-
+  try
+    Result := FLunDataConv.SolarToLunar(ADate);
+  except
+    raise
+  end;
 end;
 
 procedure TMainController.test(A, B, C: Word);

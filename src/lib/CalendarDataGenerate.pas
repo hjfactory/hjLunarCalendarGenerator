@@ -3,7 +3,7 @@ unit CalendarDataGenerate;
 interface
 
 uses
-  hjLunarDateConverter;
+  hjLunarDateType, hjLunarDateConverter;
 
 type
   TCalendarData = class(TObject)
