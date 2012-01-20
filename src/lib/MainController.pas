@@ -14,7 +14,7 @@ uses
 type
   TMainController = class(TObject)
   private
-    FLunarCalc: ThjLunarDateConverter;
+    FCalendarDataGenerator: TCalendarDataGenerate;
   public
     constructor Create;
     destructor Destroy; override;
@@ -34,12 +34,12 @@ uses
 
 constructor TMainController.Create;
 begin
-  FLunarCalc := ThjLunarDateConverter.Create;
+//  FLunarCalc := ThjLunarDateConverter.Create;
 end;
 
 destructor TMainController.Destroy;
 begin
-  FLunarCalc.Free;
+//  FLunarCalc.Free;
 
   inherited;
 end;
@@ -55,21 +55,8 @@ begin
 end;
 
 procedure TMainController.test(A, B, C: Word);
-var
-  R1: TLunarDateRec;
-  R: TSolarDateRec;
 begin
-  try
-    R1 :=FLunarCalc.SolarToLunar(DateRec(A, B, C));
-    R :=FLunarCalc.LunarToSolar(DateRec(A, B, C, False));
-  except
-    raise;
-  end;
-
-//  D.Solar.Year := 0;
-
-//  OutputDebugString(PChar(Format('%d-%d-%d(%s)', [R.Year, R.Month, R.Day, IfThen(R.IsLeapMonth, 'À±', '')])));
-  OutputDebugString(PChar(Format('%d-%d-%d', [R.Year, R.Month, R.Day])));
+//  with TCalendarDataGenerate.Create();
 end;
 
 end.
