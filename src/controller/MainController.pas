@@ -78,8 +78,6 @@ var
   Generator: TLunarCalendarDataGenerator;
   Saver: TCalendarSaverToICS;
 begin
-  Result := False;
-
   Source    := TLunarCalendarSource.Create(ADispDays);
   Generator := TLunarCalendarDataGenerator.Create(Source, AStartOfRange, AendOfRange);
   Saver     := TCalendarSaverToICS.Create(APath);

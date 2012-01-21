@@ -49,15 +49,15 @@
 			<DCCReference Include="Main.pas">
 				<Form>frmMain</Form>
 			</DCCReference>
-			<DCCReference Include="lib\MainController.pas"/>
-			<DCCReference Include="lib\hjLunarDateConverter.pas"/>
-			<DCCReference Include="lib\CalendarCommons.pas"/>
-			<DCCReference Include="lib\LunarCalendarDataGenerator.pas"/>
-			<DCCReference Include="lib\CalendarDataGenerator.pas"/>
-			<DCCReference Include="lib\hjLunarDateType.pas"/>
-			<DCCReference Include="lib\CalendarDataSaver.pas"/>
-			<DCCReference Include="lib\CalendarDataSaverToICS.pas"/>
-			<None Include="lib\LunarTableData.inc"/>
+			<DCCReference Include="library\CalendarCommons.pas"/>
+			<DCCReference Include="library\CalendarDataGenerator.pas"/>
+			<DCCReference Include="library\CalendarDataSaver.pas"/>
+			<DCCReference Include="library\CalendarDataSaverToICS.pas"/>
+			<DCCReference Include="library\LunarCalendarDataGenerator.pas"/>
+			<DCCReference Include="core\hjLunarDateConverter.pas"/>
+			<DCCReference Include="core\hjLunarDateType.pas"/>
+			<DCCReference Include="controller\MainController.pas"/>
+			<None Include="core\LunarTableData.inc"/>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>
 			</BuildConfiguration>

@@ -32,8 +32,6 @@ implementation
 { TLunarCalendarSource }
 
 constructor TLunarCalendarSource.Create(ADispDays: TDispDaySet);
-var
-  I: Integer;
 begin
   FDisplayDays := ADispDays;
 end;
