@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, MainController, StdCtrls, hjLunarDateType, ExtCtrls, ComCtrls;
+  Dialogs, MainController, StdCtrls, ExtCtrls, ComCtrls,
+  CalendarCommons, hjLunarDateType;
 
 type
   TfrmMain = class(TForm)
@@ -20,30 +21,58 @@ type
     pgcCalendar: TPageControl;
     tsLunar: TTabSheet;
     tsSpecified: TTabSheet;
-    RadioButton1: TRadioButton;
-    RadioButton2: TRadioButton;
-    RadioButton3: TRadioButton;
-    RadioButton4: TRadioButton;
+    rdoLunarDisplayDays10: TRadioButton;
+    rdoLunarDisplayDays15: TRadioButton;
+    rdoLunarDisplayDays5: TRadioButton;
+    rdoLunarDisplayDaysKor: TRadioButton;
     lvSpecified: TListView;
     lblSpecified: TLabel;
-    Button1: TButton;
-    Button2: TButton;
+    btnAddSpecified: TButton;
+    btnDelSpecified: TButton;
     btnMakeSpecifiedCalendar: TButton;
-    Label1: TLabel;
-    Label2: TLabel;
-    Label3: TLabel;
-    Label4: TLabel;
+    lblLunarDisplayDays10: TLabel;
+    lblLunarDisplayDays15: TLabel;
+    lblLunarDisplayDays5: TLabel;
+    lblLunarDisplayDaysKor: TLabel;
     btnMakeLunarCalendar: TButton;
     Label5: TLabel;
     Label6: TLabel;
-    Label7: TLabel;
+    lblBlog: TLabel;
+    일: TLabel;
+    Label8: TLabel;
+    Label9: TLabel;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label13: TLabel;
+    Label14: TLabel;
+    CheckBox1: TCheckBox;
+    lblCopyright: TLabel;
+    BalloonHint1: TBalloonHint;
+    edtStartOfRange: TEdit;
+    Label1: TLabel;
+    edtEndOfRange: TEdit;
+    Label2: TLabel;
+    dlgSave: TSaveDialog;
     procedure btnLunarToSolarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure btnSolarToLunarClick(Sender: TObject);
+    procedure lblLunarDisplayDaysClick(Sender: TObject);
+    procedure lblBlogMouseEnter(Sender: TObject);
+    procedure lblBlogMouseLeave(Sender: TObject);
+    procedure lblBlogClick(Sender: TObject);
+    procedure btnMakeLunarCalendarClick(Sender: TObject);
+    procedure btnMakeSpecifiedCalendarClick(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure edtOnlyNumericKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
     FMainController: TMainController;
+
+    function GetRangeYear(var AStart, AEnd: Word): Boolean;
+    function GetLunarCalendarDisplayDays: TDispDaySet;
+    function test: TDispDaySet;
   public
     { Public declarations }
   end;
@@ -53,8 +82,86 @@ var
 
 implementation
 
+uses
+  ShellAPI, DateUtils;
+
 {$R *.dfm}
 
+procedure TfrmMain.FormCreate(Sender: TObject);
+begin
+  FMainController := TMainController.Create;
+
+  pgcCalendar.ActivePageIndex := 0;
+end;
+
+procedure TfrmMain.FormShow(Sender: TObject);
+var
+  Lunar: TLunarDateRec;
+  Year, Month, Day: Word;
+begin
+  // 오늘 일자
+  DecodeDate(Now, Year, Month, Day);
+
+  // 음력 기본 값 설정
+  Lunar := FMainController.SolarToLunar(DateRec(Year, Month, Day));
+  edtLunarYear.Text   := IntToStr(Lunar.Year);
+  edtLunarMonth.Text  := IntToStr(Lunar.Month);
+  edtLunarDay.Text    := IntToStr(Lunar.Day);
+
+  // 양력 기본 값 설정
+  edtSolarYear.Text   := IntToStr(Year);
+  edtSolarMonth.Text  := IntToStr(Month);
+  edtSolarDay.Text    := IntToStr(Day);
+
+  // 대상 연도 설정
+  edtStartOfRange.Text  := IntToStr(Year);
+  edtEndOfRange.Text    := IntToStr(Year + 50);
+end;
+
+function TfrmMain.GetLunarCalendarDisplayDays: TDispDaySet;
+  procedure SetData(const Args: array of word);
+  var
+    I: Integer;
+  begin
+    SetLength(Result, Length(Args));
+    for I := 0 to Length(Args) - 1 do
+      Result[I] := Args[I];
+  end;
+begin
+  if rdoLunarDisplayDays10.Checked then       SetData([1, 10, 20, 31])
+  else if rdoLunarDisplayDays15.Checked then  SetData([1, 15, 31])
+  else if rdoLunarDisplayDays5.Checked then   SetData([1, 5, 10, 15, 20, 25, 31])
+  else if rdoLunarDisplayDaysKor.Checked then SetData([1, 15, 31])
+  ;
+end;
+
+function TfrmMain.GetRangeYear(var AStart, AEnd: Word): Boolean;
+begin
+  Result := False;
+
+  AStart  := StrToIntDef(edtStartOfRange.Text, 0);
+  AEnd    := StrToIntDef(edtEndOfRange.Text, 0);
+
+  if (AStart = 0) or (AEnd = 0) then
+  begin
+    ShowMessage('달력 생성연도를 정확히 입력해 주세요.');
+    edtStartOfRange.SetFocus;
+    Exit;
+  end;
+
+  // 연도 범위 처리
+
+  // 연도 4자 확인
+
+  Result := True;
+end;
+
+procedure TfrmMain.FormDestroy(Sender: TObject);
+begin
+  FMainController.Free;
+end;
+
+//  1, 음력일자를 양력일자로 변경
 procedure TfrmMain.btnLunarToSolarClick(Sender: TObject);
 var
   Lunar: TLunarDateRec;
@@ -68,12 +175,14 @@ begin
   try
     Solar := FMainController.LunarToSolar(Lunar);
 
-    ShowMessage(Format('양력: %d-%d-%d', [Solar.Year, Solar.Month, Solar.Day]));
+    ShowMessage(Format('음력 ''%d년 %d월 %d''일은'#13#10#13#10'양력 ''%d년 %d월 %d일'' 입니다.',
+      [Lunar.Year, Lunar.Month, Lunar.Day, Solar.Year, Solar.Month, Solar.Day]));
   except on E: Exception do
     ShowMessage(E.Message);
   end;
 end;
 
+//  2, 양력일자를 음력일자로 변경
 procedure TfrmMain.btnSolarToLunarClick(Sender: TObject);
 var
   Lunar: TLunarDateRec;
@@ -86,20 +195,89 @@ begin
   try
     Lunar := FMainController.SolarToLunar(Solar);
 
-    ShowMessage(Format('음력: %d-%d-%d', [Lunar.Year, Lunar.Month, Lunar.Day]));
+    ShowMessage(Format('양력 ''%d년 %d월 %d일''은'#13#10#13#10'음력 ''%d년 %d월 %d''일 입니다.',
+      [Solar.Year, Solar.Month, Solar.Day, Lunar.Year, Lunar.Month, Lunar.Day]));
   except on E: Exception do
     ShowMessage(E.Message);
   end;
 end;
 
-procedure TfrmMain.FormCreate(Sender: TObject);
+//  3, 음력 달력 생성
+procedure TfrmMain.btnMakeLunarCalendarClick(Sender: TObject);
+var
+  StartOfRange, EndOfRange: Word;
 begin
-  FMainController := TMainController.Create;
+  if not GetRangeYear(StartOfRange, EndOfRange) then
+    Exit;
+
+  dlgSave.FileName := Format('lunarcalendar_%d-%d.ics', [StartOfRange, EndOfRange]);
+  if dlgSave.Execute then
+  begin
+    FMainController.MakeLunarCalendar(
+          StartOfRange
+        , EndOfRange
+        , GetLunarCalendarDisplayDays
+        , dlgSave.FileName
+    );
+  end;
 end;
 
-procedure TfrmMain.FormDestroy(Sender: TObject);
+//  4, 음력 기념일 달력 생성
+procedure TfrmMain.btnMakeSpecifiedCalendarClick(Sender: TObject);
 begin
-  FMainController.Free;
+  //
+end;
+
+// 숫자만 입력
+procedure TfrmMain.edtOnlyNumericKeyPress(Sender: TObject; var Key: Char);
+begin
+  if not (CharInSet(Key, ['0'..'9',#25,#08,#13])) then
+    Key := #0;
+
+
+end;
+
+procedure TfrmMain.lblLunarDisplayDaysClick(Sender: TObject);
+var
+  lbl: TLabel absolute Sender;
+begin
+  if lbl = lblLunarDisplayDays10 then   rdoLunarDisplayDays10.Checked := True;
+  if lbl = lblLunarDisplayDays15 then   rdoLunarDisplayDays15.Checked := True;
+  if lbl = lblLunarDisplayDays5 then    rdoLunarDisplayDays5.Checked := True;
+  if lbl = lblLunarDisplayDaysKor then  rdoLunarDisplayDaysKor.Checked := True;
+end;
+
+function TfrmMain.test: TDispDaySet;
+  procedure SetData(const Args: array of word);
+  var
+    I: Integer;
+  begin
+    SetLength(Result, Length(Args));
+    for I := 0 to Length(Args) - 1 do
+      Result[I] := Args[I];
+  end;
+begin
+  SetLength(Result, 10);
+  Result[0] := 0;
+end;
+
+procedure TfrmMain.lblBlogClick(Sender: TObject);
+begin
+  ShellExecute(Handle, 'open', PChar(TLabel(Sender).Caption), nil, nil, SW_SHOW);
+end;
+
+procedure TfrmMain.lblBlogMouseEnter(Sender: TObject);
+begin
+  TLabel(Sender).Font.Style := TLabel(Sender).Font.Style + [fsUnderline];
+  TLabel(Sender).Font.Color := clBlue;
+  TLabel(Sender).Cursor := crHandPoint;
+end;
+
+procedure TfrmMain.lblBlogMouseLeave(Sender: TObject);
+begin
+  TLabel(Sender).Font.Style := TLabel(Sender).Font.Style - [fsUnderline];
+  TLabel(Sender).Font.Color := clBlack;
+  TLabel(Sender).Cursor := crDefault;
 end;
 
 end.

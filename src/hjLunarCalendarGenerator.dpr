@@ -5,10 +5,12 @@ uses
   Main in 'Main.pas' {frmMain},
   MainController in 'lib\MainController.pas',
   hjLunarDateConverter in 'lib\hjLunarDateConverter.pas',
-  CommonType in 'lib\CommonType.pas',
-  LunarCalendarDataGenerate in 'lib\LunarCalendarDataGenerate.pas',
-  CalendarDataGenerate in 'lib\CalendarDataGenerate.pas',
-  hjLunarDateType in 'lib\hjLunarDateType.pas';
+  CalendarCommons in 'lib\CalendarCommons.pas',
+  LunarCalendarDataGenerator in 'lib\LunarCalendarDataGenerator.pas',
+  CalendarDataGenerator in 'lib\CalendarDataGenerator.pas',
+  hjLunarDateType in 'lib\hjLunarDateType.pas',
+  CalendarDataSaver in 'lib\CalendarDataSaver.pas',
+  CalendarDataSaverToICS in 'lib\CalendarDataSaverToICS.pas';
 
 {$R *.res}
 

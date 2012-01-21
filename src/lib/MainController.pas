@@ -10,33 +10,36 @@ interface
 
 uses
   hjLunarDateType, hjLunarDateConverter, Classes, Windows, SysUtils,
-  CalendarDataGenerate;
+  CalendarCommons, CalendarDataGenerator, CalendarDataSaver;
 
 type
   TMainController = class(TObject)
   private
     FLunDataConv: ThjLunarDateConverter;
-    FCalendarDataGenerator: TCalendarDataGenerate;
+//    FCalDataGen: TCalendarDataGenerate;
+    procedure MakeCalendar(AGenerator: TCalendarDataGenerator; ASaver: TCalendarDataSaver);
   public
     constructor Create;
     destructor Destroy; override;
 
-    procedure test(A, B, C: Word);
-
     function SolarToLunar(ADate: TSolarDateRec): TLunarDateRec;
     function LunarToSolar(ADate: TLunarDateRec): TSolarDateRec;
+
+    function MakeLunarCalendar(AStartOfRange, AEndOfRange: Word; ADispDays: TDispDaySet; APath: string): Boolean;
   end;
 
 implementation
 
 uses
-  StrUtils;
+  LunarCalendarDataGenerator,
+  CalendarDataSaverToICS;
 
 { TMainController }
 
 constructor TMainController.Create;
 begin
   FLunDataConv := ThjLunarDateConverter.Create;
+//  FCalDataGen
 end;
 
 destructor TMainController.Destroy;
@@ -55,6 +58,42 @@ begin
   end;
 end;
 
+procedure TMainController.MakeCalendar(AGenerator: TCalendarDataGenerator; ASaver: TCalendarDataSaver);
+var
+  Data: TCalendarData;
+begin
+  Data := AGenerator.Next;
+
+  while Assigned(Data) do
+  begin
+    ASaver.AddData(Data);
+
+    AGenerator.Next;
+  end;
+end;
+
+function TMainController.MakeLunarCalendar(AStartOfRange, AEndOfRange: Word; ADispDays: TDispDaySet; APath: string): Boolean;
+var
+  Source: TLunarCalendarSource;
+  Generator: TLunarCalendarDataGenerator;
+  Saver: TCalendarSaverToICS;
+begin
+  Result := False;
+
+  Source    := TLunarCalendarSource.Create(ADispDays);
+  Generator := TLunarCalendarDataGenerator.Create(Source, AStartOfRange, AendOfRange);
+  Saver     := TCalendarSaverToICS.Create(APath);
+  try
+    MakeCalendar(Generator, Saver);
+
+    Result := True;
+  finally
+    Source.Free;
+    Generator.Free;
+    Saver.Free;
+  end;
+end;
+
 function TMainController.SolarToLunar(ADate: TSolarDateRec): TLunarDateRec;
 begin
   try
@@ -62,11 +101,6 @@ begin
   except
     raise
   end;
-end;
-
-procedure TMainController.test(A, B, C: Word);
-begin
-//  with TCalendarDataGenerate.Create();
 end;
 
 end.

@@ -32,7 +32,7 @@ type
 implementation
 
 uses
-  Math, DateUtils, CommonType;
+  Math, DateUtils, CalendarCommons;
 
 {$include LunarTableData.inc}
 
