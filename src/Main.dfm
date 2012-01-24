@@ -285,7 +285,6 @@
       Margins.Right = 4
       Margins.Bottom = 4
       Caption = #51020#47141' '#45804#47141' '#49373#49457
-      ExplicitHeight = 346
       object lblLunarDisplayDays10: TLabel
         Left = 55
         Top = 93
@@ -422,7 +421,6 @@
       Margins.Bottom = 4
       Caption = #44592#45392#51068' '#45804#47141' '#49373#49457
       ImageIndex = 1
-      ExplicitHeight = 346
       object lblSpecified: TLabel
         Left = 4
         Top = 13

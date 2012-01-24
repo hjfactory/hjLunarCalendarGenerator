@@ -17,7 +17,7 @@ type
   private
     FLunDataConv: ThjLunarDateConverter;
 //    FCalDataGen: TCalendarDataGenerate;
-    procedure MakeCalendar(AGenerator: TCalendarDataGenerator; ASaver: TCalendarDataSaver);
+    function MakeCalendar(AGenerator: TCalendarDataGenerator; ASaver: TCalendarDataSaver): Boolean;
   public
     constructor Create;
     destructor Destroy; override;
@@ -25,7 +25,8 @@ type
     function SolarToLunar(ADate: TSolarDateRec): TLunarDateRec;
     function LunarToSolar(ADate: TLunarDateRec): TSolarDateRec;
 
-    function MakeLunarCalendar(AStartOfRange, AEndOfRange: Word; ADispDays: TDispDaySet; APath: string): Boolean;
+    function MakeLunarCalendar(AStartOfRange, AEndOfRange: Word; ADispDays: TDispDays; APath: string): Boolean;
+    function MakeSpecifiedCalendar(AStartOfRange, AEndOfRange: Word; APath: string): Boolean;
   end;
 
 implementation
@@ -58,7 +59,16 @@ begin
   end;
 end;
 
-procedure TMainController.MakeCalendar(AGenerator: TCalendarDataGenerator; ASaver: TCalendarDataSaver);
+function TMainController.SolarToLunar(ADate: TSolarDateRec): TLunarDateRec;
+begin
+  try
+    Result := FLunDataConv.SolarToLunar(ADate);
+  except
+    raise
+  end;
+end;
+
+function TMainController.MakeCalendar(AGenerator: TCalendarDataGenerator; ASaver: TCalendarDataSaver): Boolean;
 var
   Data: TCalendarData;
 begin
@@ -72,7 +82,18 @@ begin
   end;
 end;
 
-function TMainController.MakeLunarCalendar(AStartOfRange, AEndOfRange: Word; ADispDays: TDispDaySet; APath: string): Boolean;
+{
+  FUNCTION
+    음력이 표시된 달력을 생성
+  PARAMETER
+    AStartOfRange   : 달력 생성범위 시작
+    AEndOfRange     : 달력 생성범위 종료
+    ADispDays       : 음력표시 일자
+    APath           : 달력 생성경로
+  RETURN
+    Boolean : 달력 생성 성공 여부
+}
+function TMainController.MakeLunarCalendar(AStartOfRange, AEndOfRange: Word; ADispDays: TDispDays; APath: string): Boolean;
 var
   Source: TLunarCalendarSource;
   Generator: TLunarCalendarDataGenerator;
@@ -82,9 +103,7 @@ begin
   Generator := TLunarCalendarDataGenerator.Create(Source, AStartOfRange, AendOfRange);
   Saver     := TCalendarSaverToICS.Create(APath);
   try
-    MakeCalendar(Generator, Saver);
-
-    Result := True;
+    Result := MakeCalendar(Generator, Saver);
   finally
     Source.Free;
     Generator.Free;
@@ -92,13 +111,10 @@ begin
   end;
 end;
 
-function TMainController.SolarToLunar(ADate: TSolarDateRec): TLunarDateRec;
+function TMainController.MakeSpecifiedCalendar(AStartOfRange, AEndOfRange: Word;
+  APath: string): Boolean;
 begin
-  try
-    Result := FLunDataConv.SolarToLunar(ADate);
-  except
-    raise
-  end;
+
 end;
 
 end.

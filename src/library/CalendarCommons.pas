@@ -33,7 +33,7 @@ const
   LunarKoreanEndOfTheMonth: string  = '±×¹Ê';
 
 type
-  TDispDaySet = array of word;
+  TDispDays = array of word;
 
   TCalendarData = class(TObject)
   private

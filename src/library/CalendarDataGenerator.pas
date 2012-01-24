@@ -11,6 +11,7 @@ type
   public
     procedure First; virtual; abstract;
     function Next: Boolean; virtual; abstract;
+    function HasNext: Boolean; virtual; abstract;
     function Day: Word; virtual; abstract;
   end;
 

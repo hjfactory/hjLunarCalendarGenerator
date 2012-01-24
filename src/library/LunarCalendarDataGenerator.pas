@@ -9,18 +9,21 @@ type
   TLunarCalendarSource = class(TCalendarSource)
   private
     FIndex: Integer;
-    FDisplayDays: TDispDaySet;
+    FDisplayDays: TDispDays;
   public
-    constructor Create(ADispDays: TDispDaySet);
+    constructor Create(ADispDays: TDispDays);
 
     procedure First; overload;
     function Next: Boolean; overload;
+    function HasNext: Boolean; overload;
     function Day: Word; overload;
   end;
 
   TLunarCalendarDataGenerator = class(TCalendarDataGenerator)
   private
     FCurrentDate: TSolarDateRec;
+    FYear,
+    FMonth: Word;
   protected
     procedure initialize; overload;
   public
@@ -31,7 +34,7 @@ implementation
 
 { TLunarCalendarSource }
 
-constructor TLunarCalendarSource.Create(ADispDays: TDispDaySet);
+constructor TLunarCalendarSource.Create(ADispDays: TDispDays);
 begin
   FDisplayDays := ADispDays;
 end;
@@ -48,10 +51,14 @@ begin
   FIndex := 0;
 end;
 
+function TLunarCalendarSource.HasNext: Boolean;
+begin
+  Result := FIndex < Length(FDisplayDays);
+end;
+
 function TLunarCalendarSource.Next: Boolean;
 begin
   Inc(FIndex);
-  Result := FIndex < Length(FDisplayDays);
 end;
 
 { TLunarCalendarDataGenerate }
@@ -59,11 +66,23 @@ end;
 procedure TLunarCalendarDataGenerator.initialize;
 begin
   FCurrentDate := DateRec(FStartOfRange, 1, 1);
+
+  FYear   := FStartOfRange;
+  FMonth  := 1;
 end;
 
 function TLunarCalendarDataGenerator.Next: TCalendarData;
 begin
   Result := nil;
+
+  // 없으면 Month 증가
+
+  // Month가 가득차면 Year 증가
+
+  // Year이 FEndOfRange보다 크면 종료
+
+  // Source에 Next 요청
+
 end;
 
 end.

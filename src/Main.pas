@@ -71,8 +71,7 @@ type
     FMainController: TMainController;
 
     function GetRangeYear(var AStart, AEnd: Word): Boolean;
-    function GetLunarCalendarDisplayDays: TDispDaySet;
-    function test: TDispDaySet;
+    function GetLunarCalendarDisplayDays: TDispDays;
   public
     { Public declarations }
   end;
@@ -118,7 +117,7 @@ begin
   edtEndOfRange.Text    := IntToStr(Year + 50);
 end;
 
-function TfrmMain.GetLunarCalendarDisplayDays: TDispDaySet;
+function TfrmMain.GetLunarCalendarDisplayDays: TDispDays;
   procedure SetData(const Args: array of word);
   var
     I: Integer;
@@ -128,10 +127,10 @@ function TfrmMain.GetLunarCalendarDisplayDays: TDispDaySet;
       Result[I] := Args[I];
   end;
 begin
-  if rdoLunarDisplayDays10.Checked then       SetData([1, 10, 20, 31])
-  else if rdoLunarDisplayDays15.Checked then  SetData([1, 15, 31])
-  else if rdoLunarDisplayDays5.Checked then   SetData([1, 5, 10, 15, 20, 25, 31])
-  else if rdoLunarDisplayDaysKor.Checked then SetData([1, 15, 31])
+  if rdoLunarDisplayDays10.Checked then       SetData([1, 10, 20, 99])
+  else if rdoLunarDisplayDays15.Checked then  SetData([1, 15, 99])
+  else if rdoLunarDisplayDays5.Checked then   SetData([1, 5, 10, 15, 20, 25, 99])
+  else if rdoLunarDisplayDaysKor.Checked then SetData([1, 15, 99])
   ;
 end;
 
@@ -245,20 +244,6 @@ begin
   if lbl = lblLunarDisplayDays15 then   rdoLunarDisplayDays15.Checked := True;
   if lbl = lblLunarDisplayDays5 then    rdoLunarDisplayDays5.Checked := True;
   if lbl = lblLunarDisplayDaysKor then  rdoLunarDisplayDaysKor.Checked := True;
-end;
-
-function TfrmMain.test: TDispDaySet;
-  procedure SetData(const Args: array of word);
-  var
-    I: Integer;
-  begin
-    SetLength(Result, Length(Args));
-    for I := 0 to Length(Args) - 1 do
-      Result[I] := Args[I];
-  end;
-begin
-  SetLength(Result, 10);
-  Result[0] := 0;
 end;
 
 procedure TfrmMain.lblBlogClick(Sender: TObject);
