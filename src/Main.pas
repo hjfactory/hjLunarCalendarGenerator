@@ -46,7 +46,7 @@ type
     Label12: TLabel;
     Label13: TLabel;
     Label14: TLabel;
-    CheckBox1: TCheckBox;
+    chkLunarLeap: TCheckBox;
     lblCopyright: TLabel;
     BalloonHint1: TBalloonHint;
     edtStartOfRange: TEdit;
@@ -71,7 +71,7 @@ type
     FMainController: TMainController;
 
     function GetRangeYear(var AStart, AEnd: Word): Boolean;
-    function GetLunarCalendarDisplayDays: TDispDays;
+    function GetLunarDaysDisplayType: TLunarDaysDisplayType;
   public
     { Public declarations }
   end;
@@ -117,20 +117,12 @@ begin
   edtEndOfRange.Text    := IntToStr(Year + 50);
 end;
 
-function TfrmMain.GetLunarCalendarDisplayDays: TDispDays;
-  procedure SetData(const Args: array of word);
-  var
-    I: Integer;
-  begin
-    SetLength(Result, Length(Args));
-    for I := 0 to Length(Args) - 1 do
-      Result[I] := Args[I];
-  end;
+function TfrmMain.GetLunarDaysDisplayType: TLunarDaysDisplayType;
 begin
-  if rdoLunarDisplayDays10.Checked then       SetData([1, 10, 20, 99])
-  else if rdoLunarDisplayDays15.Checked then  SetData([1, 15, 99])
-  else if rdoLunarDisplayDays5.Checked then   SetData([1, 5, 10, 15, 20, 25, 99])
-  else if rdoLunarDisplayDaysKor.Checked then SetData([1, 15, 99])
+  if rdoLunarDisplayDays10.Checked then       Result := lddt10
+  else if rdoLunarDisplayDays15.Checked then  Result := lddt15
+  else if rdoLunarDisplayDays5.Checked then   Result := lddt5
+  else if rdoLunarDisplayDaysKor.Checked then Result := lddtKor
   ;
 end;
 
@@ -169,7 +161,7 @@ begin
   Lunar.Year  := StrToIntDef(edtLunarYear.Text, 0);
   Lunar.Month := StrToIntDef(edtLunarMonth.Text, 0);
   Lunar.Day   := StrToIntDef(edtLunarDay.Text, 0);
-  Lunar.IsLeapMonth := False;
+  Lunar.IsLeapMonth := chkLunarLeap.Checked;
 
   try
     Solar := FMainController.LunarToSolar(Lunar);
@@ -215,9 +207,11 @@ begin
     FMainController.MakeLunarCalendar(
           StartOfRange
         , EndOfRange
-        , GetLunarCalendarDisplayDays
+        , GetLunarDaysDisplayType
         , dlgSave.FileName
     );
+
+    ShowMessage('¿Ï·á');
   end;
 end;
 

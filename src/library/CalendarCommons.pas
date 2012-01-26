@@ -13,10 +13,10 @@ const
 //  ERROR_INVALID_RANGE_MONTH = 10030;
 //  ERROR_INVALID_RANGE_DAY   = 10040;
 //
-//  DISP_DAYS_5DAY    = 110;  // 1, 5, 10, 15, 20, 25, 29(30)
-//  DISP_DAYS_10DAY   = 120;  // 1, 10, 20, 29(30)
-//  DISP_DAYS_15DAY   = 130;  // 1, 15, 29(30)
-//  DISP_DAYS_KOR     = 200;  // 정월, 보름, 그믐
+  LUNARDAYS_DISPTYPE_5DAY    = 110;  // 1, 5, 10, 15, 20, 25, 29(30)
+  LUNARDAYS_DISPTYPE_10DAY   = 120;  // 1, 10, 20, 29(30)
+  LUNARDAYS_DISPTYPE_15DAY   = 130;  // 1, 15, 29(30)
+  LUNARDAYS_DISPTYPE_KOR     = 200;  // 정월, 보름, 그믐
 //
 //  // 99 is last day
 //  Days5Day: array[0..5] of Word = (1, 5, 10, 20, 25, 99);
@@ -24,16 +24,9 @@ const
 //  Days15Day: array[0..2] of Word = (1, 15, 99);
 //  DaysKor: array[0..2] of Word = (1, 15, 99);
 //
-  // 한국 달이름
-  LunarKoreanMonthName: array[1..12] of string = (
-      '정월', '이월', '삼월', '사월', '오월',   '유월'
-    , '칠월', '팔월', '구월', '시월', '동짓달', '섣달'
-  );
-  LunarKoreanHalfMonth: string      = '보름';
-  LunarKoreanEndOfTheMonth: string  = '그믐';
 
 type
-  TDispDays = array of word;
+  TLunarDaysDisplayType = (lddt5, lddt10, lddt15, lddtKor);
 
   TCalendarData = class(TObject)
   private

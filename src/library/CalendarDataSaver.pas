@@ -3,6 +3,7 @@ unit CalendarDataSaver;
 interface
 
 uses
+  Windows, Classes, SysUtils,
   CalendarCommons;
 
 type
@@ -20,7 +21,15 @@ implementation
 
 procedure TCalendarDataSaver.AddData(AData: TCalendarData);
 begin
-
+  OutputDebugString(PChar(Format('S: %d-%d-%d, L: %d-%d-%d, Summury: %s', [
+      AData.Solar.Year
+    , AData.Solar.Month
+    , AData.Solar.Day
+    , AData.Lunar.Year
+    , AData.Lunar.Month
+    , AData.Lunar.Day
+    , AData.Summary
+  ])));
 end;
 
 constructor TCalendarDataSaver.Create(APath: string);

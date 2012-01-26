@@ -25,7 +25,7 @@ type
     function SolarToLunar(ADate: TSolarDateRec): TLunarDateRec;
     function LunarToSolar(ADate: TLunarDateRec): TSolarDateRec;
 
-    function MakeLunarCalendar(AStartOfRange, AEndOfRange: Word; ADispDays: TDispDays; APath: string): Boolean;
+    function MakeLunarCalendar(AStartOfRange, AEndOfRange: Word; ADisplayType: TLunarDaysDisplayType; APath: string): Boolean;
     function MakeSpecifiedCalendar(AStartOfRange, AEndOfRange: Word; APath: string): Boolean;
   end;
 
@@ -78,7 +78,7 @@ begin
   begin
     ASaver.AddData(Data);
 
-    AGenerator.Next;
+    Data := AGenerator.Next;
   end;
 end;
 
@@ -93,13 +93,13 @@ end;
   RETURN
     Boolean : 崔仿 积己 己傍 咯何
 }
-function TMainController.MakeLunarCalendar(AStartOfRange, AEndOfRange: Word; ADispDays: TDispDays; APath: string): Boolean;
+function TMainController.MakeLunarCalendar(AStartOfRange, AEndOfRange: Word; ADisplayType: TLunarDaysDisplayType; APath: string): Boolean;
 var
   Source: TLunarCalendarSource;
   Generator: TLunarCalendarDataGenerator;
   Saver: TCalendarSaverToICS;
 begin
-  Source    := TLunarCalendarSource.Create(ADispDays);
+  Source    := TLunarCalendarSource.Create(ADisplayType);
   Generator := TLunarCalendarDataGenerator.Create(Source, AStartOfRange, AendOfRange);
   Saver     := TCalendarSaverToICS.Create(APath);
   try
