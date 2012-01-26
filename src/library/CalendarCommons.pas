@@ -35,7 +35,7 @@ type
     FDescription: string;
     FSummary: string;
   public
-    procedure SetData(ASolarDate: TSolarDateRec; ALunarDate: TLunarDateRec; ASummary, ADescription: string);
+    function SetData(ASolarDate: TSolarDateRec; ALunarDate: TLunarDateRec; ASummary, ADescription: string): TCalendarData;
 
     property Solar: TSolarDateRec read FSolarDate;
     property Lunar: TLunarDateRec read FLunarDate;
@@ -48,13 +48,15 @@ implementation
 
 { TCalendarData }
 
-procedure TCalendarData.SetData(ASolarDate: TSolarDateRec;
-  ALunarDate: TLunarDateRec; ASummary, ADescription: string);
+function TCalendarData.SetData(ASolarDate: TSolarDateRec;
+  ALunarDate: TLunarDateRec; ASummary, ADescription: string): TCalendarData;
 begin
   FSolarDate    := ASolarDate;
   FLunarDate    := ALunarDate;
   FSummary      := ASummary;
   FDescription  := ADescription;
+
+  Result := Self;
 end;
 
 end.

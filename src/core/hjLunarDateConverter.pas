@@ -24,8 +24,8 @@ type
     function LunarToSolar(ADate: TLunarDateRec): TSolarDateRec;
 
     function GetLunarDaysOfMonth(AYear, AMonth: Word; AIsLeapMonth: Boolean): Word;
-    function HasLunarMonthData(AYear: Word; AMonthIndex: Integer): Boolean;
-    function GetLunarMonthFromMonthIndex(AYear: Word; AMonthIndex: Integer; var AMonth: Word; var AIsLeapMonth: Boolean): Boolean;
+    function HasLunarMonthData(AYear: Word; AIndexOfMonth: Integer): Boolean;
+    function GetLunarMonthFromMonthIndex(AYear: Word; AIndexOfMonth: Integer; var AMonth: Word; var AIsLeapMonth: Boolean): Boolean;
 
     function GetSupportSolarPriod: string;
     function GetSupportLunarPriod: string;
@@ -402,7 +402,7 @@ begin
 end;
 
 function ThjLunarDateConverter.GetLunarMonthFromMonthIndex(AYear: Word;
-  AMonthIndex: Integer; var AMonth: Word;
+  AIndexOfMonth: Integer; var AMonth: Word;
   var AIsLeapMonth: Boolean): Boolean;
 var
   I: Integer;
@@ -413,17 +413,17 @@ begin
   MonthTable := LunarMonthTable[AYear - SupportYearStart];
 
   // Index 에러
-  if Length(MonthTable) < AMonthIndex then
+  if Length(MonthTable) < AIndexOfMonth then
     Exit;
 
-  AMonth := AMonthIndex;
-  AIsLeapMonth := CharInSet(MonthTable[AMonthIndex], ['3', '4']);
-  for I := 1 to AMonthIndex do
+  AMonth := AIndexOfMonth;
+  AIsLeapMonth := CharInSet(MonthTable[AIndexOfMonth], ['3', '4']);
+  for I := 1 to AIndexOfMonth do
   begin
     // Index 이전에 윤달이 있으면 윤달 제거
     if CharInSet(MonthTable[I], ['3', '4']) then
     begin
-      AMonth := AMonthIndex - 1;
+      AMonth := AIndexOfMonth - 1;
       Break;  // 윤달은 한번만 있음
     end;
   end;
@@ -432,17 +432,17 @@ begin
 end;
 
 function ThjLunarDateConverter.HasLunarMonthData(AYear: Word;
-  AMonthIndex: Integer): Boolean;
+  AIndexOfMonth: Integer): Boolean;
 var
   MonthTable: string;
 begin
   Result := False;
   MonthTable := LunarMonthTable[AYear - SupportYearStart];
 
-  if Length(MonthTable) < AMonthIndex then
+  if Length(MonthTable) < AIndexOfMonth then
     Exit;
 
-  Result := CharInSet(MonthTable[AMonthIndex], ['1'..'4']);
+  Result := CharInSet(MonthTable[AIndexOfMonth], ['1'..'4']);
 end;
 
 end.

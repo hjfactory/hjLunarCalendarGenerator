@@ -27,7 +27,7 @@ type
     constructor Create(ADispType: TLunarDaysDisplayType);
 
     procedure First; override;
-    function Next: Boolean; override;
+    procedure Next; override;
     function HasNext: Boolean; override;
     function Day: Word;
 
@@ -37,10 +37,10 @@ type
   TLunarCalendarDataGenerator = class(TCalendarDataGenerator)
   private
     FCurrentDate: TSolarDateRec;
-    FYear,
-    FMonthIndex: Word;
+    FYear: Word;
+    FIndexOfMonth: Integer;   // 월의 인덱스(월번호랑 다름)
 
-    function GetLunarDateRec(AYear: Word; AMonthIndex: Integer; ADay: Word): TLunarDateRec;
+    function GetLunarDateRec(AYear: Word; AIndexOfMonth: Integer; ADay: Word): TLunarDateRec;
     function GetSummury(ADispType: TLunarDaysDisplayType; ALunar: TLunarDateRec): string;
   protected
     procedure Initialize; override;
@@ -92,12 +92,20 @@ begin
   Result := FIndex < Length(FDisplayDays);
 end;
 
-function TLunarCalendarSource.Next: Boolean;
+procedure TLunarCalendarSource.Next;
 begin
   Inc(FIndex);
 end;
 
 { TLunarCalendarDataGenerate }
+
+procedure TLunarCalendarDataGenerator.Initialize;
+begin
+  FCurrentDate := DateRec(FStartOfRange, 1, 1);
+
+  FYear   := FStartOfRange;
+  FIndexOfMonth  := 1;
+end;
 
 function TLunarCalendarDataGenerator.GetSummury(
   ADispType: TLunarDaysDisplayType; ALunar: TLunarDateRec): string;
@@ -118,20 +126,12 @@ begin
   end;
 end;
 
-procedure TLunarCalendarDataGenerator.Initialize;
-begin
-  FCurrentDate := DateRec(FStartOfRange, 1, 1);
-
-  FYear   := FStartOfRange;
-  FMonthIndex  := 1;
-end;
-
 function TLunarCalendarDataGenerator.GetLunarDateRec(AYear: Word;
-  AMonthIndex: Integer; ADay: Word): TLunarDateRec;
+  AIndexOfMonth: Integer; ADay: Word): TLunarDateRec;
 begin
   Result.Year := FYear;
 
-  FLunarDateConvertor.GetLunarMonthFromMonthIndex(FYear, AMonthIndex, Result.Month, Result.IsLeapMonth);
+  FLunarDateConvertor.GetLunarMonthFromMonthIndex(FYear, AIndexOfMonth, Result.Month, Result.IsLeapMonth);
 
   if ADay > 30 then
     Result.Day := FLunarDateConvertor.GetLunarDaysOfMonth(FYear, Result.Month, Result.IsLeapMonth)
@@ -152,27 +152,23 @@ begin
   // Source에 데이터가 없으면 다음달(Month 증가)
   if not Source.HasNext then
   begin
-    Inc(FMonthIndex);
+    Inc(FIndexOfMonth);
     FCalendarSource.First;
   end;
 
-  // Month가 가득차면 Year 증가
-  if not FLunarDateConvertor.HasLunarMonthData(FYear, FMonthIndex) then
+  if not FLunarDateConvertor.HasLunarMonthData(FYear, FIndexOfMonth) then
   begin
     Inc(FYear);
-    FMonthIndex := 1;
+    FIndexOfMonth := 1;
   end;
 
-  // Year이 FEndOfRange보다 크면 종료
   if FYear > FEndOfRange then
     Exit;
 
-  Lunar := GetLunarDateRec(FYear, FMonthIndex, Source.Day);
+  Lunar := GetLunarDateRec(FYear, FIndexOfMonth, Source.Day);
   Solar := FLunarDateConvertor.LunarToSolar(Lunar);
 
-  // Source에 Next 요청
-  FCalendarData.SetData(Solar, Lunar, GetSummury(Source.DisplayDaysType, Lunar), '');
-  Result := FCalendarData;
+  Result := FCalendarData.SetData(Solar, Lunar, GetSummury(Source.DisplayDaysType, Lunar), '');
 
   Source.Next;
 end;

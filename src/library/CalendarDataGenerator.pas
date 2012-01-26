@@ -9,9 +9,8 @@ type
   // 달력데이터를 만들기 위한 정보
   TCalendarSource = class(TObject)
   public
-    // abstract; 제거해야 하넹 ㅠㅡ
     procedure First; virtual; abstract;
-    function Next: Boolean; virtual; abstract;
+    procedure Next; virtual; abstract;
     function HasNext: Boolean; virtual; abstract;
   end;
 

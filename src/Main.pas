@@ -54,6 +54,7 @@ type
     edtEndOfRange: TEdit;
     Label2: TLabel;
     dlgSave: TSaveDialog;
+    Button1: TButton;
     procedure btnLunarToSolarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -66,6 +67,7 @@ type
     procedure btnMakeSpecifiedCalendarClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure edtOnlyNumericKeyPress(Sender: TObject; var Key: Char);
+    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
     FMainController: TMainController;
@@ -82,7 +84,7 @@ var
 implementation
 
 uses
-  ShellAPI, DateUtils;
+  ShellAPI, DateUtils, CalendarDataSaverToICS;
 
 {$R *.dfm}
 
@@ -193,6 +195,14 @@ begin
   end;
 end;
 
+procedure TfrmMain.Button1Click(Sender: TObject);
+var
+  T: TCalendarSaverToICS;
+begin
+  T := TCalendarSaverToICS.Create('C:\test.txt');
+  T.Free;
+end;
+
 //  3, 음력 달력 생성
 procedure TfrmMain.btnMakeLunarCalendarClick(Sender: TObject);
 var
@@ -204,21 +214,28 @@ begin
   dlgSave.FileName := Format('lunarcalendar_%d-%d.ics', [StartOfRange, EndOfRange]);
   if dlgSave.Execute then
   begin
-    FMainController.MakeLunarCalendar(
+    if FileExists(dlgSave.FileName) then
+    begin
+      if Application.MessageBox(PChar(Format('%s 파일이 이미 존재합니다.'#13#10'이 파일을 바꾸시겠습니까?', [dlgSave.Filename])), PChar('hjLunarCalendarGenerator'), MB_ICONQUESTION OR MB_YESNO) = ID_NO then
+      begin
+        Exit;
+      end;
+    end;
+
+    if FMainController.MakeLunarCalendar(
           StartOfRange
         , EndOfRange
         , GetLunarDaysDisplayType
         , dlgSave.FileName
-    );
-
-    ShowMessage('완료');
+    ) then
+      ShowMessage('달력파일 생성을 완료하였습니다.');
   end;
 end;
 
 //  4, 음력 기념일 달력 생성
 procedure TfrmMain.btnMakeSpecifiedCalendarClick(Sender: TObject);
 begin
-  //
+  ShowMessage('준비 중');
 end;
 
 // 숫자만 입력

@@ -8,37 +8,33 @@ uses
 
 type
   TCalendarDataSaver = class(TObject)
+  protected
+    FFileStream: TFileStream;
   public
-    constructor Create(APath: string);
+    constructor Create(APath: string); virtual;
     destructor Destroy; override;
 
-    procedure AddData(AData: TCalendarData);
+    procedure AddData(AData: TCalendarData); virtual; abstract;
   end;
 
 implementation
 
+uses
+  Math;
+
 { TCalendarDataSaver }
 
-procedure TCalendarDataSaver.AddData(AData: TCalendarData);
-begin
-  OutputDebugString(PChar(Format('S: %d-%d-%d, L: %d-%d-%d, Summury: %s', [
-      AData.Solar.Year
-    , AData.Solar.Month
-    , AData.Solar.Day
-    , AData.Lunar.Year
-    , AData.Lunar.Month
-    , AData.Lunar.Day
-    , AData.Summary
-  ])));
-end;
+{ TCalendarDataSaver }
 
 constructor TCalendarDataSaver.Create(APath: string);
 begin
-
+  FFileStream := TFileStream.Create(APath, IfThen(FileExists(APath), fmOpenReadWrite or fmShareDenyNone, fmCreate));
 end;
 
 destructor TCalendarDataSaver.Destroy;
 begin
+  FFileStream.Free;
+  OutputDebugString(PChar('TCalendarDataSaver.Destroy'));
 
   inherited;
 end;
