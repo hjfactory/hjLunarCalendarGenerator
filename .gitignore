@@ -1,0 +1,11 @@
+*.dcu
+*.~*
+*.dproj.local
+*.identcache
+__history
+*.drc
+*.map
+*.zip
+*.exe
+*.dll
+*.elf

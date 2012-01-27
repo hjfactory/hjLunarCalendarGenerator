@@ -54,7 +54,6 @@ type
     edtEndOfRange: TEdit;
     Label2: TLabel;
     dlgSave: TSaveDialog;
-    Button1: TButton;
     procedure btnLunarToSolarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -67,7 +66,6 @@ type
     procedure btnMakeSpecifiedCalendarClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure edtOnlyNumericKeyPress(Sender: TObject; var Key: Char);
-    procedure Button1Click(Sender: TObject);
   private
     { Private declarations }
     FMainController: TMainController;
@@ -193,14 +191,6 @@ begin
   except on E: Exception do
     ShowMessage(E.Message);
   end;
-end;
-
-procedure TfrmMain.Button1Click(Sender: TObject);
-var
-  T: TCalendarSaverToICS;
-begin
-  T := TCalendarSaverToICS.Create('C:\test.txt');
-  T.Free;
 end;
 
 //  3, 음력 달력 생성
