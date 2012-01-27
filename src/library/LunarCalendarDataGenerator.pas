@@ -6,15 +6,6 @@ uses
   SysUtils,
   hjLunarDateType ,hjLunarDateConverter, CalendarDataGenerator, CalendarCommons;
 
-const
-  // 한국 달이름
-  LunarKoreanMonthName: array[1..12] of string = (
-      '정월', '이월', '삼월', '사월', '오월',   '유월'
-    , '칠월', '팔월', '구월', '시월', '동짓달', '섣달'
-  );
-  LunarKoreanHalfMonth: string      = '보름';
-  LunarKoreanEndOfTheMonth: string  = '그믐';
-
 type
   TLunarDispDays = array of word;
 
@@ -36,9 +27,8 @@ type
 
   TLunarCalendarDataGenerator = class(TCalendarDataGenerator)
   private
-    FCurrentDate: TSolarDateRec;
     FYear: Word;
-    FIndexOfMonth: Integer;   // 월의 인덱스(월번호랑 다름)
+    FIndexOfMonth: Integer;   // 음력월의 인덱스(월번호랑 다름)
 
     function GetLunarDateRec(AYear: Word; AIndexOfMonth: Integer; ADay: Word): TLunarDateRec;
     function GetSummury(ADispType: TLunarDaysDisplayType; ALunar: TLunarDateRec): string;
@@ -101,14 +91,21 @@ end;
 
 procedure TLunarCalendarDataGenerator.Initialize;
 begin
-  FCurrentDate := DateRec(FStartOfRange, 1, 1);
-
   FYear   := FStartOfRange;
   FIndexOfMonth  := 1;
 end;
 
 function TLunarCalendarDataGenerator.GetSummury(
   ADispType: TLunarDaysDisplayType; ALunar: TLunarDateRec): string;
+
+const
+  // 한국 달이름
+  LunarKoreanMonthName: array[1..12] of string = (
+      '정월', '이월', '삼월', '사월', '오월',   '유월'
+    , '칠월', '팔월', '구월', '시월', '동짓달', '섣달'
+  );
+  LunarKoreanHalfMonth: string      = '보름';
+  LunarKoreanEndOfTheMonth: string  = '그믐';
 begin
   case ADispType of
   lddt5..lddt15:
@@ -117,10 +114,10 @@ begin
     begin
       case ALunar.Day of
       1:      Result := IfThen(ALunar.IsLeapMonth, '윤', '') + LunarKoreanMonthName[ALunar.Month];
-      15:     Result := '보름';
+      15:     Result := LunarKoreanHalfMonth;
       5, 10, 20, 25:
-        Result := Format('%s%d.%d', [IfThen(ALunar.IsLeapMonth, '(윤)', ''), ALunar.Month, ALunar.Day]);
-      else    Result := '그믐';
+              Result := Format('%s%d.%d', [IfThen(ALunar.IsLeapMonth, '(윤)', ''), ALunar.Month, ALunar.Day]);
+      else    Result := LunarKoreanEndOfTheMonth;
       end;
     end;
   end;
@@ -133,16 +130,19 @@ begin
 
   FLunarDateConvertor.GetLunarMonthFromMonthIndex(FYear, AIndexOfMonth, Result.Month, Result.IsLeapMonth);
 
+  // 말일 처리
   if ADay > 30 then
     Result.Day := FLunarDateConvertor.GetLunarDaysOfMonth(FYear, Result.Month, Result.IsLeapMonth)
   else
     Result.Day := ADay;
 end;
 
+// 연도의 월별로 순환하며 Source의 Day만큼 반복한다.
 function TLunarCalendarDataGenerator.Next: TCalendarData;
 var
   Lunar: TLunarDateRec;
   Solar: TSolarDateRec;
+  Summary: string;
   Source: TLunarCalendarSource;
 begin
   Result := nil;
@@ -156,7 +156,8 @@ begin
     FCalendarSource.First;
   end;
 
-  if not FLunarDateConvertor.HasLunarMonthData(FYear, FIndexOfMonth) then
+  // 월 인덱스 초과 시 연도증가 순환
+  if not FLunarDateConvertor.InvalidMonthIndex(FYear, FIndexOfMonth) then
   begin
     Inc(FYear);
     FIndexOfMonth := 1;
@@ -167,8 +168,9 @@ begin
 
   Lunar := GetLunarDateRec(FYear, FIndexOfMonth, Source.Day);
   Solar := FLunarDateConvertor.LunarToSolar(Lunar);
+  Summary := GetSummury(Source.DisplayDaysType, Lunar);
 
-  Result := FCalendarData.SetData(Solar, Lunar, GetSummury(Source.DisplayDaysType, Lunar), '');
+  Result := FCalendarData.SetData(Solar, Lunar, Summary, '');
 
   Source.Next;
 end;

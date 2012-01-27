@@ -74,11 +74,19 @@ var
 begin
   Data := AGenerator.Next;
 
-  while Assigned(Data) do
-  begin
-    ASaver.AddData(Data);
+  if not Assigned(Data) then
+    Exit;
 
-    Data := AGenerator.Next;
+  ASaver.BeginSave;
+  try
+    while Assigned(Data) do
+    begin
+      ASaver.AddData(Data);
+
+      Data := AGenerator.Next;
+    end;
+  finally
+    ASaver.EndSave;
   end;
 end;
 

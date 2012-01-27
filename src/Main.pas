@@ -117,6 +117,11 @@ begin
   edtEndOfRange.Text    := IntToStr(Year + 50);
 end;
 
+procedure TfrmMain.FormDestroy(Sender: TObject);
+begin
+  FMainController.Free;
+end;
+
 function TfrmMain.GetLunarDaysDisplayType: TLunarDaysDisplayType;
 begin
   if rdoLunarDisplayDays10.Checked then       Result := lddt10
@@ -145,11 +150,6 @@ begin
   // 연도 4자 확인
 
   Result := True;
-end;
-
-procedure TfrmMain.FormDestroy(Sender: TObject);
-begin
-  FMainController.Free;
 end;
 
 //  1, 음력일자를 양력일자로 변경
@@ -218,6 +218,7 @@ begin
         , GetLunarDaysDisplayType
         , dlgSave.FileName
     ) then
+    ;
       ShowMessage('달력파일 생성을 완료하였습니다.');
   end;
 end;

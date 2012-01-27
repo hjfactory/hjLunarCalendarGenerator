@@ -24,7 +24,7 @@ type
     function LunarToSolar(ADate: TLunarDateRec): TSolarDateRec;
 
     function GetLunarDaysOfMonth(AYear, AMonth: Word; AIsLeapMonth: Boolean): Word;
-    function HasLunarMonthData(AYear: Word; AIndexOfMonth: Integer): Boolean;
+    function InvalidMonthIndex(AYear: Word; AIndexOfMonth: Integer): Boolean;
     function GetLunarMonthFromMonthIndex(AYear: Word; AIndexOfMonth: Integer; var AMonth: Word; var AIsLeapMonth: Boolean): Boolean;
 
     function GetSupportSolarPriod: string;
@@ -401,6 +401,7 @@ begin
   end;
 end;
 
+// 음력 달의 Index로 달번호와 윤달 여부를 반환한다.
 function ThjLunarDateConverter.GetLunarMonthFromMonthIndex(AYear: Word;
   AIndexOfMonth: Integer; var AMonth: Word;
   var AIsLeapMonth: Boolean): Boolean;
@@ -431,7 +432,7 @@ begin
   Result := True;
 end;
 
-function ThjLunarDateConverter.HasLunarMonthData(AYear: Word;
+function ThjLunarDateConverter.InvalidMonthIndex(AYear: Word;
   AIndexOfMonth: Integer): Boolean;
 var
   MonthTable: string;

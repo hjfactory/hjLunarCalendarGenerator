@@ -9,11 +9,16 @@ uses
 type
   TCalendarDataSaver = class(TObject)
   protected
+    FFilePath: string;
     FFileStream: TFileStream;
+
+    procedure WriteData(AData: string); virtual;
   public
     constructor Create(APath: string); virtual;
     destructor Destroy; override;
 
+    procedure BeginSave; virtual;
+    procedure EndSave; virtual;
     procedure AddData(AData: TCalendarData); virtual; abstract;
   end;
 
@@ -24,19 +29,37 @@ uses
 
 { TCalendarDataSaver }
 
-{ TCalendarDataSaver }
-
 constructor TCalendarDataSaver.Create(APath: string);
 begin
-  FFileStream := TFileStream.Create(APath, IfThen(FileExists(APath), fmOpenReadWrite or fmShareDenyNone, fmCreate));
+  if FileExists(APath) then
+    DeleteFile(APath);
+
+  FFilePath := APath;
+  FFileStream := TFileStream.Create(APath, fmCreate or fmShareDenyWrite);
 end;
 
 destructor TCalendarDataSaver.Destroy;
 begin
   FFileStream.Free;
-  OutputDebugString(PChar('TCalendarDataSaver.Destroy'));
 
   inherited;
+end;
+
+procedure TCalendarDataSaver.BeginSave;
+begin
+
+end;
+
+procedure TCalendarDataSaver.EndSave;
+begin
+
+end;
+
+procedure TCalendarDataSaver.WriteData(AData: string);
+begin
+  AData := AData + #13#10;
+  FFileStream.Position := FFileStream.Size;
+  FFileStream.Write(Pointer(AData)^, Length(AData)*2);
 end;
 
 end.
