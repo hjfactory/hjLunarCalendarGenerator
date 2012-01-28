@@ -1,4 +1,4 @@
-unit CalendarCommons;
+unit CalendarData;
 
 interface
 
@@ -6,8 +6,6 @@ uses
   SysUtils, hjLunarDateType;
 
 type
-  TLunarDaysDisplayType = (lddt5, lddt10, lddt15, lddtKor);
-
   TCalendarData = class(TObject)
   private
     FSolarDate: TSolarDateRec;
@@ -26,7 +24,6 @@ type
     property Description: string read FDescription;
     property Created: TDateTime read FCreated;
   end;
-
 
 implementation
 

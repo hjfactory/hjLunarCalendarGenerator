@@ -1,0 +1,48 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{74F1717A-9802-4330-ACA3-282F99CD4EAD}</ProjectGuid>
+		</PropertyGroup>
+		<ItemGroup>
+			<Projects Include="UnitTest\hjLunarCalendarGeneratorTests.dproj">
+				<Dependencies/>
+			</Projects>
+			<Projects Include="src\hjLunarCalendarGenerator.dproj">
+				<Dependencies/>
+			</Projects>
+		</ItemGroup>
+		<ProjectExtensions>
+			<Borland.Personality>Default.Personality.12</Borland.Personality>
+			<Borland.ProjectType/>
+			<BorlandProject>
+				<Default.Personality/>
+			</BorlandProject>
+		</ProjectExtensions>
+		<Target Name="hjLunarCalendarGeneratorTests">
+			<MSBuild Projects="UnitTest\hjLunarCalendarGeneratorTests.dproj"/>
+		</Target>
+		<Target Name="hjLunarCalendarGeneratorTests:Clean">
+			<MSBuild Targets="Clean" Projects="UnitTest\hjLunarCalendarGeneratorTests.dproj"/>
+		</Target>
+		<Target Name="hjLunarCalendarGeneratorTests:Make">
+			<MSBuild Targets="Make" Projects="UnitTest\hjLunarCalendarGeneratorTests.dproj"/>
+		</Target>
+		<Target Name="hjLunarCalendarGenerator">
+			<MSBuild Projects="src\hjLunarCalendarGenerator.dproj"/>
+		</Target>
+		<Target Name="hjLunarCalendarGenerator:Clean">
+			<MSBuild Targets="Clean" Projects="src\hjLunarCalendarGenerator.dproj"/>
+		</Target>
+		<Target Name="hjLunarCalendarGenerator:Make">
+			<MSBuild Targets="Make" Projects="src\hjLunarCalendarGenerator.dproj"/>
+		</Target>
+		<Target Name="Build">
+			<CallTarget Targets="hjLunarCalendarGeneratorTests;hjLunarCalendarGenerator"/>
+		</Target>
+		<Target Name="Clean">
+			<CallTarget Targets="hjLunarCalendarGeneratorTests:Clean;hjLunarCalendarGenerator:Clean"/>
+		</Target>
+		<Target Name="Make">
+			<CallTarget Targets="hjLunarCalendarGeneratorTests:Make;hjLunarCalendarGenerator:Make"/>
+		</Target>
+		<Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+	</Project>

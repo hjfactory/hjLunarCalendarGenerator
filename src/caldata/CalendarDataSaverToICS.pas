@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Classes, SysUtils,
-  CalendarCommons, CalendarDataSaver;
+  CalendarData, CalendarDataSaver;
 
 type
   TCalendarSaverToICS = class(TCalendarDataSaver)
@@ -47,10 +47,13 @@ procedure TCalendarSaverToICS.BeginSave;
     if I > 0 then
       Result := Copy(Result, 1, I-1);
   end;
-
 var
-  Filename: string;
+  W: Word;
 begin
+  // Unicode file
+  W := MakeWord($FF, $FE);
+  FFileStream.Write(W, SizeOf(Word));
+
   // icalendar object begin
   WriteData('BEGIN:VCALENDAR');
 
@@ -67,7 +70,7 @@ begin
   WriteData('TZOFFSETFROM:+0900');
   WriteData('TZOFFSETTO:+0900');
   WriteData('TZNAME:KST');
-  WriteData('DTSTART:19700101T000000');
+  WriteData('DTSTART:19700101T000000Z');
   WriteData('END:STANDARD');
   WriteData('END:VTIMEZONE');
 end;

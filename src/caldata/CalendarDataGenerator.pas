@@ -3,7 +3,7 @@ unit CalendarDataGenerator;
 interface
 
 uses
-  hjLunarDateType, hjLunarDateConverter, CalendarCommons;
+  hjLunarDateType, hjLunarDateConverter, CalendarData;
 
 type
   // 달력데이터를 만들기 위한 정보
@@ -28,7 +28,8 @@ type
     constructor Create(ASource: TCalendarSource; AStartOfRange, AEndOfRange: Word);
     destructor Destroy; override;
 
-    function Next: TCalendarData; virtual; abstract;
+    function NextData: TCalendarData; virtual; abstract;
+    property Data: TCalendarData read FCalendarData;
 
     property StartOfRange: Word read FStartOfRange;
     property EndOfRange: Word read FEndOfRange;

@@ -4,7 +4,8 @@ interface
 
 uses
   SysUtils,
-  hjLunarDateType ,hjLunarDateConverter, CalendarDataGenerator, CalendarCommons;
+  hjLunarDateType ,hjLunarDateConverter,
+  CalendarCommons, CalendarDataGenerator, CalendarData;
 
 type
   TLunarDispDays = array of word;
@@ -35,7 +36,7 @@ type
   protected
     procedure Initialize; override;
   public
-    function Next: TCalendarData; override;
+    function NextData: TCalendarData; override;
   end;
 
 implementation
@@ -117,7 +118,7 @@ begin
       15:     Result := LunarKoreanHalfMonth;
       5, 10, 20, 25:
               Result := Format('%s%d.%d', [IfThen(ALunar.IsLeapMonth, '(윤)', ''), ALunar.Month, ALunar.Day]);
-      else    Result := LunarKoreanEndOfTheMonth;
+      else    Result := Format('%s(%d)', [LunarKoreanEndOfTheMonth, ALunar.Day]);
       end;
     end;
   end;
@@ -138,7 +139,7 @@ begin
 end;
 
 // 연도의 월별로 순환하며 Source의 Day만큼 반복한다.
-function TLunarCalendarDataGenerator.Next: TCalendarData;
+function TLunarCalendarDataGenerator.NextData: TCalendarData;
 var
   Lunar: TLunarDateRec;
   Solar: TSolarDateRec;
@@ -149,11 +150,11 @@ begin
 
   Source := TLunarCalendarSource(FCalendarSource);
 
-  // Source에 데이터가 없으면 다음달(Month 증가)
+  // Source는 월별 데이터이므로 없으면 다음달(Month 증가)
   if not Source.HasNext then
   begin
     Inc(FIndexOfMonth);
-    FCalendarSource.First;
+    Source.First;
   end;
 
   // 월 인덱스 초과 시 연도증가 순환
@@ -166,13 +167,17 @@ begin
   if FYear > FEndOfRange then
     Exit;
 
-  Lunar := GetLunarDateRec(FYear, FIndexOfMonth, Source.Day);
-  Solar := FLunarDateConvertor.LunarToSolar(Lunar);
-  Summary := GetSummury(Source.DisplayDaysType, Lunar);
+  try
+    Lunar := GetLunarDateRec(FYear, FIndexOfMonth, Source.Day);
+    Solar := FLunarDateConvertor.LunarToSolar(Lunar);
+    Summary := GetSummury(Source.DisplayDaysType, Lunar);
 
-  Result := FCalendarData.SetData(Solar, Lunar, Summary, '');
+    Result := FCalendarData.SetData(Solar, Lunar, Summary, '');
 
-  Source.Next;
+    Source.Next;
+  except
+    raise
+  end;
 end;
 
 end.

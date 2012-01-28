@@ -17,10 +17,10 @@ const
   // 지원하는 년도(1881~2100)
   SupportYearStart  = 1881;
   SupportYearEnd    = 2100;
-  SupportYearCount  = SupportYearEnd - SupportYearStart;
+  SupportYearRange  = SupportYearEnd - SupportYearStart;
 
-  SupportDateStartStr = '1881-1-30';
-  SupportDateEndStr   = '2101-1-28';
+  SupportSolarDateStartStr = '1881-1-30';
+  SupportSolarDateEndStr   = '2101-1-28';
 
   StandardDateDelta     = 0     // 1880-12-31까지 일자수
                           + (SupportYearStart - 1) * 365      // 연도
@@ -34,7 +34,7 @@ const
 
   // 음력> 월별 소월/대월/윤월(소)/윤월(대) = 1/2/3/4
   // LunarMonthTable[0][12]가 0이면 윤달 없음
-  LunarMonthTable: array[0..SupportYearCount, 0..12] of char = (
+  LunarMonthTable: array[0..SupportYearRange, 0..12] of char = (
       '1212122322121', '1212121221220', '1121121222120', '2112132122122', '2112112121220' // 1881~1890	
     , '2121211212120', '2212321121212', '2122121121210', '2122121212120', '1232122121212'	
     , '1212121221220', '1121123221222', '1121121212220', '1212112121220', '2121231212121' // 1891~1900	
@@ -81,7 +81,7 @@ const
     , '2121321212212', '2121121122120', '2212112112210', '2223211211212', '2212121211210'
 	);
   // 음력> 연도의 일수	
-  LunarYearDays: array[0..SupportYearCount] of Integer = (
+  LunarYearDays: array[0..SupportYearRange] of Integer = (
        384, 355, 354, 384, 354, 354, 384, 354, 355, 384 // 1881~1890	
      , 355, 384, 354, 354, 383, 355, 354, 384, 355, 384	
      , 354, 355, 383, 354, 355, 384, 354, 355, 384, 354 // 1901~1910	

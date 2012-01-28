@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, MainController, StdCtrls, ExtCtrls, ComCtrls,
+  Dialogs, MakeCalendarController, StdCtrls, ExtCtrls, ComCtrls,
   CalendarCommons, hjLunarDateType;
 
 type
@@ -68,7 +68,7 @@ type
     procedure edtOnlyNumericKeyPress(Sender: TObject; var Key: Char);
   private
     { Private declarations }
-    FMainController: TMainController;
+    FMakeCalendar: TMakeCalendarController;
 
     function GetRangeYear(var AStart, AEnd: Word): Boolean;
     function GetLunarDaysDisplayType: TLunarDaysDisplayType;
@@ -88,7 +88,7 @@ uses
 
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
-  FMainController := TMainController.Create;
+  FMakeCalendar := TMakeCalendarController.Create;
 
   pgcCalendar.ActivePageIndex := 0;
 end;
@@ -102,7 +102,7 @@ begin
   DecodeDate(Now, Year, Month, Day);
 
   // 음력 기본 값 설정
-  Lunar := FMainController.SolarToLunar(DateRec(Year, Month, Day));
+  Lunar := FMakeCalendar.SolarToLunar(DateRec(Year, Month, Day));
   edtLunarYear.Text   := IntToStr(Lunar.Year);
   edtLunarMonth.Text  := IntToStr(Lunar.Month);
   edtLunarDay.Text    := IntToStr(Lunar.Day);
@@ -119,15 +119,16 @@ end;
 
 procedure TfrmMain.FormDestroy(Sender: TObject);
 begin
-  FMainController.Free;
+  FMakeCalendar.Free;
 end;
 
 function TfrmMain.GetLunarDaysDisplayType: TLunarDaysDisplayType;
 begin
-  if rdoLunarDisplayDays10.Checked then       Result := lddt10
+  if rdoLunarDisplayDays5.Checked then        Result := lddt5
+  else if rdoLunarDisplayDays10.Checked then  Result := lddt10
   else if rdoLunarDisplayDays15.Checked then  Result := lddt15
-  else if rdoLunarDisplayDays5.Checked then   Result := lddt5
   else if rdoLunarDisplayDaysKor.Checked then Result := lddtKor
+  else                                        Result := lddt5
   ;
 end;
 
@@ -164,7 +165,7 @@ begin
   Lunar.IsLeapMonth := chkLunarLeap.Checked;
 
   try
-    Solar := FMainController.LunarToSolar(Lunar);
+    Solar := FMakeCalendar.LunarToSolar(Lunar);
 
     ShowMessage(Format('음력 ''%d년 %d월 %d''일은'#13#10#13#10'양력 ''%d년 %d월 %d일'' 입니다.',
       [Lunar.Year, Lunar.Month, Lunar.Day, Solar.Year, Solar.Month, Solar.Day]));
@@ -184,7 +185,7 @@ begin
   Solar.Day   := StrToIntDef(edtSolarDay.Text, 0);
 
   try
-    Lunar := FMainController.SolarToLunar(Solar);
+    Lunar := FMakeCalendar.SolarToLunar(Solar);
 
     ShowMessage(Format('양력 ''%d년 %d월 %d일''은'#13#10#13#10'음력 ''%d년 %d월 %d''일 입니다.',
       [Solar.Year, Solar.Month, Solar.Day, Lunar.Year, Lunar.Month, Lunar.Day]));
@@ -201,6 +202,7 @@ begin
   if not GetRangeYear(StartOfRange, EndOfRange) then
     Exit;
 
+  dlgsave.InitialDir := ExtractFilePath(Application.ExeName);
   dlgSave.FileName := Format('lunarcalendar_%d-%d.ics', [StartOfRange, EndOfRange]);
   if dlgSave.Execute then
   begin
@@ -212,14 +214,17 @@ begin
       end;
     end;
 
-    if FMainController.MakeLunarCalendar(
-          StartOfRange
-        , EndOfRange
-        , GetLunarDaysDisplayType
-        , dlgSave.FileName
-    ) then
-    ;
-      ShowMessage('달력파일 생성을 완료하였습니다.');
+    try
+      if FMakeCalendar.MakeLunarCalendar(
+            StartOfRange
+          , EndOfRange
+          , GetLunarDaysDisplayType
+          , dlgSave.FileName
+      ) then
+        ShowMessage('달력파일 생성을 완료하였습니다.');
+    except on E: Exception do
+      ShowMessage('달력파일 생성 중 오류가 발생했습니다.'#13#10 + Format('(오류내용: %s)', [E.Message]));
+    end;
   end;
 end;
 

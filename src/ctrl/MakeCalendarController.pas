@@ -1,10 +1,4 @@
-{
-  1, 음력 양력 변경
-  2, 달력 생성
-  3, 기념일 관리 기능
-}
-
-unit MainController;
+unit MakeCalendarController;
 
 interface
 
@@ -13,10 +7,10 @@ uses
   CalendarCommons, CalendarDataGenerator, CalendarDataSaver;
 
 type
-  TMainController = class(TObject)
+  TMakeCalendarController = class(TObject)
   private
     FLunDataConv: ThjLunarDateConverter;
-//    FCalDataGen: TCalendarDataGenerate;
+
     function MakeCalendar(AGenerator: TCalendarDataGenerator; ASaver: TCalendarDataSaver): Boolean;
   public
     constructor Create;
@@ -27,30 +21,32 @@ type
 
     function MakeLunarCalendar(AStartOfRange, AEndOfRange: Word; ADisplayType: TLunarDaysDisplayType; APath: string): Boolean;
     function MakeSpecifiedCalendar(AStartOfRange, AEndOfRange: Word; APath: string): Boolean;
+
+    function SupportRange: string;
   end;
 
 implementation
 
 uses
   LunarCalendarDataGenerator,
+  CalendarData,
   CalendarDataSaverToICS;
 
 { TMainController }
 
-constructor TMainController.Create;
+constructor TMakeCalendarController.Create;
 begin
   FLunDataConv := ThjLunarDateConverter.Create;
-//  FCalDataGen
 end;
 
-destructor TMainController.Destroy;
+destructor TMakeCalendarController.Destroy;
 begin
   FLunDataConv.Free;
 
   inherited;
 end;
 
-function TMainController.LunarToSolar(ADate: TLunarDateRec): TSolarDateRec;
+function TMakeCalendarController.LunarToSolar(ADate: TLunarDateRec): TSolarDateRec;
 begin
   try
     Result := FLunDataConv.LunarToSolar(ADate);
@@ -59,7 +55,7 @@ begin
   end;
 end;
 
-function TMainController.SolarToLunar(ADate: TSolarDateRec): TLunarDateRec;
+function TMakeCalendarController.SolarToLunar(ADate: TSolarDateRec): TLunarDateRec;
 begin
   try
     Result := FLunDataConv.SolarToLunar(ADate);
@@ -68,25 +64,37 @@ begin
   end;
 end;
 
-function TMainController.MakeCalendar(AGenerator: TCalendarDataGenerator; ASaver: TCalendarDataSaver): Boolean;
+function TMakeCalendarController.SupportRange: string;
+begin
+  Result := Format('', [FLunDataConv.GetSupportLunarPriod]);
+end;
+
+// 달력 생성
+function TMakeCalendarController.MakeCalendar(AGenerator: TCalendarDataGenerator; ASaver: TCalendarDataSaver): Boolean;
 var
   Data: TCalendarData;
 begin
-  Data := AGenerator.Next;
-
-  if not Assigned(Data) then
-    Exit;
-
-  ASaver.BeginSave;
   try
-    while Assigned(Data) do
-    begin
-      ASaver.AddData(Data);
+    Data := AGenerator.NextData;
 
-      Data := AGenerator.Next;
+    if not Assigned(Data) then
+      raise Exception.Create('해당하는 데이터가 없습니다.');
+
+    ASaver.BeginSave;
+    try
+      while Assigned(Data) do
+      begin
+        ASaver.AddData(Data);
+
+        Data := AGenerator.NextData;
+      end;
+    finally
+      ASaver.EndSave;
     end;
-  finally
-    ASaver.EndSave;
+
+    Result := True;
+  except
+    raise
   end;
 end;
 
@@ -101,7 +109,8 @@ end;
   RETURN
     Boolean : 달력 생성 성공 여부
 }
-function TMainController.MakeLunarCalendar(AStartOfRange, AEndOfRange: Word; ADisplayType: TLunarDaysDisplayType; APath: string): Boolean;
+function TMakeCalendarController.MakeLunarCalendar(AStartOfRange, AEndOfRange: Word;
+  ADisplayType: TLunarDaysDisplayType; APath: string): Boolean;
 var
   Source: TLunarCalendarSource;
   Generator: TLunarCalendarDataGenerator;
@@ -119,10 +128,10 @@ begin
   end;
 end;
 
-function TMainController.MakeSpecifiedCalendar(AStartOfRange, AEndOfRange: Word;
+function TMakeCalendarController.MakeSpecifiedCalendar(AStartOfRange, AEndOfRange: Word;
   APath: string): Boolean;
 begin
-
+  Result := False;
 end;
 
 end.

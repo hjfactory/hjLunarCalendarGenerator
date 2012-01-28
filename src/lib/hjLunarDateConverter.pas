@@ -11,6 +11,8 @@ type
   ThjLunarDateConverter = class(TObject)
   private
     procedure RangeError(const Msg: string);
+
+    function GetMonthToMonthIndex(AMonth: Word; AIsLeapMonth: Boolean; AMonthTable: string): Integer;
   protected
     procedure ValidateDate(ADate: TSolarDateRec); overload;
     procedure ValidateDate(ADate: TLunarDateRec); overload;
@@ -29,6 +31,7 @@ type
 
     function GetSupportSolarPriod: string;
     function GetSupportLunarPriod: string;
+    function GetSupportLunarYear: string;
   end;
 
 implementation
@@ -57,9 +60,14 @@ begin
   Result := Format('%s-1-1~%s-12-31)', [SupportYearStart, SupportYearEnd]);
 end;
 
+function ThjLunarDateConverter.GetSupportLunarYear: string;
+begin
+  Result := Format('%s~%s)', [SupportYearStart, SupportYearEnd]);
+end;
+
 function ThjLunarDateConverter.GetSupportSolarPriod: string;
 begin
-  Result := SupportDateStartStr + '~' + SupportDateEndStr;
+  Result := SupportSolarDateStartStr + '~' + SupportSolarDateEndStr;
 end;
 
 procedure ThjLunarDateConverter.RangeError(const Msg: string);
@@ -75,7 +83,7 @@ procedure ThjLunarDateConverter.ValidateDate(ADate: TSolarDateRec);
 var
   ErrMsg: string;
 begin
-  ErrMsg := Format('유효범위를 벗어 났습니다.(양력지원 일자: %0:s~%1:s)', [SupportDateStartStr, SupportDateEndStr]);
+  ErrMsg := Format('유효범위를 벗어 났습니다.(양력지원 일자: %0:s~%1:s)', [SupportSolarDateStartStr, SupportSolarDateEndStr]);
 
   // ### 연도 범위 오류
   if ADate.Year < SupportYearStart then
@@ -100,7 +108,6 @@ end;
 
 procedure ThjLunarDateConverter.ValidateDate(ADate: TLunarDateRec);
 var
-  I: Integer;
   ErrMsg: string;
   MonthTable: string;
   MonthIndex: Integer;
@@ -127,15 +134,7 @@ begin
     RangeError(Format('음력 ''%0:d년 %1:d월''은 윤달이 아닙니다.', [ADate.Year, ADate.Month]));
 
   // 대월 소월 검증
-  MonthIndex := ADate.Month;
-  if ADate.IsLeapMonth then
-    Inc(MonthIndex);
-
-  for I := 1 to ADate.Month do
-  begin
-    if CharInSet(MonthTable[I], ['3', '4']) then
-      Inc(MonthIndex);
-  end;
+  MonthIndex := GetMonthToMonthIndex(ADate.Month, ADate.IsLeapMonth, MonthTable);
   DaysOfMonth := IfThen(CharInSet(MonthTable[MonthIndex], ['1', '3']), 29, 30);
   if ADate.Day > DaysOfMonth then
     RangeError(Format('음력 ''%0:d년 %1:d월%4:s''은 ''%3:d일'' 까지 있습니다.(''%2:d일''은 유효하지 않습니다.)', [ADate.Year, ADate.Month, ADate.Day, DaysOfMonth, IfThen(ADate.IsLeapMonth, '(윤달)', '')]));
@@ -158,16 +157,16 @@ function ThjLunarDateConverter.LunarToSolar(ADate: TLunarDateRec): TSolarDateRec
       Result := Result + LunarYearDays[I];
   end;
 
-  function GetDayCountFromMonth(AYear, AMonth: Word; AIsLeap: Boolean): Integer;
+  // 지난달 까지의 일수
+  function GetDayCountFromLastMonth(AYear, AMonth: Word; AIsLeap: Boolean): Integer;
   var
-    I: Integer;
+    I, MonthIndex: Integer;
     MonthTable: string;
   begin
     Result := 0;
     MonthTable := LunarMonthTable[AYear - SupportYearStart];
-    if AIsLeap then
-      Inc(AMonth);
-    for I := 1 to AMonth do
+    MonthIndex := GetMonthToMonthIndex(AMonth, AIsLeap, MonthTable) - 1;  // 지난달
+    for I := 1 to MonthIndex do
       Result := Result + IfThen(CharInSet(MonthTable[I], ['1', '3']), 29, 30);
   end;
 
@@ -193,7 +192,7 @@ begin
   // STEP 1
   DayCount := DayCount + GetDayCountFromYear(ADate.Year - 1);
   // STEP 2
-  DayCount := DayCount + GetDayCountFromMonth(ADate.Year, ADate.Month - 1, ADate.IsLeapMonth);
+  DayCount := DayCount + GetDayCountFromLastMonth(ADate.Year, ADate.Month, ADate.IsLeapMonth);
   // STEP 3
   DayCount := DayCount + ADate.Day;
 
@@ -209,7 +208,7 @@ begin
 
   // STEP 5
   Result.Year := SupportYearStart - 1;
-  for I := 0 to SupportYearCount - 1 do
+  for I := 0 to SupportYearRange - 1 do
   begin
     Inc(Result.Year);
 
@@ -373,32 +372,18 @@ function ThjLunarDateConverter.GetLunarDaysOfMonth(AYear, AMonth: Word;
   AIsLeapMonth: Boolean): Word;
 var
   MonthTable: string;
-  I, MonthIndex: Integer;
+  MonthIndex: Integer;
 begin
   Result := 0;
   MonthTable := LunarMonthTable[AYear - SupportYearStart];
 
-  MonthIndex := AMonth;
-  // 요청달의 이전에 윤달이 있으면 Index 증가
-  for I := 1 to AMonth do
-  begin
-    if CharInSet(MonthTable[I], ['3', '4']) then
-      Inc(MonthIndex);
-  end;
+  MonthIndex := GetMonthToMonthIndex(AMonth, AIsLeapMonth, MonthTable);
 
   // 윤달요청 경우 예외
-  if AIsLeapMonth then
-  begin
-    Inc(MonthIndex);
-    // 실제 윤달이 아니면 종료
-    if not CharInSet(MonthTable[MonthIndex], ['3', '4']) then
-      Exit;
-    Result := IfThen(MonthTable[MonthIndex] = '3', 29, 30);
-  end
-  else
-  begin
-    Result := IfThen(MonthTable[MonthIndex] = '1', 29, 30);
-  end;
+  if AIsLeapMonth and (not CharInSet(MonthTable[MonthIndex], ['3', '4'])) then
+    Exit;
+
+  Result := IfThen(CharInSet(MonthTable[MonthIndex], ['1', '3']), 29, 30);
 end;
 
 // 음력 달의 Index로 달번호와 윤달 여부를 반환한다.
@@ -430,6 +415,20 @@ begin
   end;
 
   Result := True;
+end;
+
+function ThjLunarDateConverter.GetMonthToMonthIndex(AMonth: Word;
+  AIsLeapMonth: Boolean; AMonthTable: string): Integer;
+var
+  I: Integer;
+begin
+  Result := AMonth;
+  for I := 1 to AMonth do
+    if CharInSet(AMonthTable[I], ['3', '4']) then
+      Inc(Result);
+
+  if AIsLeapMonth then
+    Inc(Result);
 end;
 
 function ThjLunarDateConverter.InvalidMonthIndex(AYear: Word;

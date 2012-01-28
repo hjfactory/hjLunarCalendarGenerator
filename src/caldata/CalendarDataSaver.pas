@@ -4,7 +4,7 @@ interface
 
 uses
   Windows, Classes, SysUtils,
-  CalendarCommons;
+  CalendarData;
 
 type
   TCalendarDataSaver = class(TObject)
