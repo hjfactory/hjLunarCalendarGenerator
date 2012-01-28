@@ -1,6 +1,6 @@
 *.dcu
 *.~*
-*.dproj.local
+*.local
 *.identcache
 __history
 *.drc

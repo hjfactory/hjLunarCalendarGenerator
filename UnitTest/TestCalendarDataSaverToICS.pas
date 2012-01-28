@@ -24,8 +24,8 @@ type
     procedure SetUp; override;
     procedure TearDown; override;
   published
-    procedure TestAddData;
     procedure TestSave;
+    procedure TestAddData;
   end;
 
 implementation
