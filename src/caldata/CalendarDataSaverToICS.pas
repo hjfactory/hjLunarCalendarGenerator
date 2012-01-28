@@ -90,8 +90,6 @@ procedure TCalendarSaverToICS.AddData(AData: TCalendarData);
   begin
     Result := FormatDateTime('YYYYMMDD', IncDay(EncodeDate(AYear, AMonth, ADay)));
   end;
-var
-  t: string;
 begin
 
   WriteData('BEGIN:VEVENT');

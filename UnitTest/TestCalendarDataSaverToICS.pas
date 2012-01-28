@@ -12,7 +12,8 @@ unit TestCalendarDataSaverToICS;
 interface
 
 uses
-  TestFramework, Classes, SysUtils, CalendarDataSaverToICS, CalendarCommons, Windows;
+  TestFramework, Classes, SysUtils, CalendarDataSaverToICS, CalendarCommons,
+  CalendarData, Windows;
 
 type
   // Test methods for class TCalendarDataSaver

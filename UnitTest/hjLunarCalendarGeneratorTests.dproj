@@ -49,13 +49,14 @@
 				<MainSource>MainSource</MainSource>
 			</DelphiCompile>
 			<DCCReference Include="TestCalendarDataSaverToICS.pas"/>
-			<DCCReference Include="..\src\library\CalendarCommons.pas"/>
-			<DCCReference Include="..\src\library\CalendarDataGenerator.pas"/>
-			<DCCReference Include="..\src\library\CalendarDataSaver.pas"/>
-			<DCCReference Include="..\src\library\CalendarDataSaverToICS.pas"/>
-			<DCCReference Include="..\src\library\LunarCalendarDataGenerator.pas"/>
-			<DCCReference Include="..\src\core\hjLunarDateConverter.pas"/>
-			<DCCReference Include="..\src\core\hjLunarDateType.pas"/>
+			<DCCReference Include="..\src\caldata\CalendarCommons.pas"/>
+			<DCCReference Include="..\src\caldata\CalendarDataGenerator.pas"/>
+			<DCCReference Include="..\src\caldata\CalendarDataSaver.pas"/>
+			<DCCReference Include="..\src\caldata\CalendarDataSaverToICS.pas"/>
+			<DCCReference Include="..\src\caldata\LunarCalendarDataGenerator.pas"/>
+			<DCCReference Include="..\src\lib\hjLunarDateConverter.pas"/>
+			<DCCReference Include="..\src\lib\hjLunarDateType.pas"/>
+			<DCCReference Include="..\src\model\CalendarData.pas"/>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>
 			</BuildConfiguration>

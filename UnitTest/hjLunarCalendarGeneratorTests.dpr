@@ -20,13 +20,14 @@ uses
   GUITestRunner,
   TextTestRunner,
   TestCalendarDataSaverToICS in 'TestCalendarDataSaverToICS.pas',
-  CalendarCommons in '..\src\library\CalendarCommons.pas',
-  CalendarDataGenerator in '..\src\library\CalendarDataGenerator.pas',
-  CalendarDataSaver in '..\src\library\CalendarDataSaver.pas',
-  CalendarDataSaverToICS in '..\src\library\CalendarDataSaverToICS.pas',
-  LunarCalendarDataGenerator in '..\src\library\LunarCalendarDataGenerator.pas',
-  hjLunarDateConverter in '..\src\core\hjLunarDateConverter.pas',
-  hjLunarDateType in '..\src\core\hjLunarDateType.pas';
+  CalendarCommons in '..\src\caldata\CalendarCommons.pas',
+  CalendarDataGenerator in '..\src\caldata\CalendarDataGenerator.pas',
+  CalendarDataSaver in '..\src\caldata\CalendarDataSaver.pas',
+  CalendarDataSaverToICS in '..\src\caldata\CalendarDataSaverToICS.pas',
+  LunarCalendarDataGenerator in '..\src\caldata\LunarCalendarDataGenerator.pas',
+  hjLunarDateConverter in '..\src\lib\hjLunarDateConverter.pas',
+  hjLunarDateType in '..\src\lib\hjLunarDateType.pas',
+  CalendarData in '..\src\model\CalendarData.pas';
 
 {$R *.RES}
 

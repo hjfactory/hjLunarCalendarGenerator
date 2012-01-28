@@ -3,14 +3,16 @@ program hjLunarCalendarGenerator;
 uses
   Forms,
   Main in 'Main.pas' {frmMain},
-  CalendarCommons in 'library\CalendarCommons.pas',
-  CalendarDataGenerator in 'library\CalendarDataGenerator.pas',
-  CalendarDataSaver in 'library\CalendarDataSaver.pas',
-  CalendarDataSaverToICS in 'library\CalendarDataSaverToICS.pas',
-  LunarCalendarDataGenerator in 'library\LunarCalendarDataGenerator.pas',
-  hjLunarDateConverter in 'core\hjLunarDateConverter.pas',
-  hjLunarDateType in 'core\hjLunarDateType.pas',
-  MainController in 'controller\MainController.pas';
+  CalendarCommons in 'caldata\CalendarCommons.pas',
+  CalendarDataGenerator in 'caldata\CalendarDataGenerator.pas',
+  CalendarDataSaver in 'caldata\CalendarDataSaver.pas',
+  CalendarDataSaverToICS in 'caldata\CalendarDataSaverToICS.pas',
+  LunarCalendarDataGenerator in 'caldata\LunarCalendarDataGenerator.pas',
+  hjLunarDateConverter in 'lib\hjLunarDateConverter.pas',
+  hjLunarDateType in 'lib\hjLunarDateType.pas',
+  MakeCalendarController in 'ctrl\MakeCalendarController.pas',
+  SpecifiedDateController in 'ctrl\SpecifiedDateController.pas',
+  CalendarData in 'model\CalendarData.pas';
 
 {$R *.res}
 

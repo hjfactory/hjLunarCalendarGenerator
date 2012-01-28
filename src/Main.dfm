@@ -2,8 +2,8 @@
   Left = 0
   Top = 0
   Caption = 'hjLunarCalendarGenerator :: '#51020#47141#45804#47141' '#49373#49457#44592
-  ClientHeight = 667
-  ClientWidth = 628
+  ClientHeight = 658
+  ClientWidth = 631
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -271,13 +271,13 @@
   object pgcCalendar: TPageControl
     Left = 9
     Top = 224
-    Width = 610
+    Width = 613
     Height = 393
     Margins.Left = 4
     Margins.Top = 4
     Margins.Right = 4
     Margins.Bottom = 4
-    ActivePage = tsLunar
+    ActivePage = tsSpecified
     TabOrder = 3
     object tsLunar: TTabSheet
       Margins.Left = 4
@@ -285,9 +285,13 @@
       Margins.Right = 4
       Margins.Bottom = 4
       Caption = #51020#47141' '#45804#47141' '#49373#49457
+      ExplicitWidth = 602
+      DesignSize = (
+        605
+        361)
       object lblLunarDisplayDays10: TLabel
         Left = 55
-        Top = 93
+        Top = 159
         Width = 378
         Height = 17
         Margins.Left = 4
@@ -299,7 +303,7 @@
       end
       object lblLunarDisplayDays15: TLabel
         Left = 55
-        Top = 156
+        Top = 222
         Width = 340
         Height = 17
         Margins.Left = 4
@@ -311,7 +315,7 @@
       end
       object lblLunarDisplayDays5: TLabel
         Left = 55
-        Top = 218
+        Top = 287
         Width = 480
         Height = 17
         Margins.Left = 4
@@ -323,7 +327,7 @@
       end
       object lblLunarDisplayDaysKor: TLabel
         Left = 55
-        Top = 281
+        Top = 85
         Width = 374
         Height = 34
         Margins.Left = 4
@@ -336,17 +340,19 @@
       object Label6: TLabel
         Left = 4
         Top = 13
-        Width = 400
-        Height = 34
+        Width = 597
+        Height = 35
         Margins.Left = 4
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
+        Anchors = [akLeft, akTop, akRight]
         Caption = #50500#47000' '#54637#47785' '#51473' '#51020#47141#45804#47141#50640' '#54364#49884#54624' '#51068#51088' '#54805#49885#51012' '#49440#53469#54616#44256' '#45804#47141#54028#51068' '#13#10#49373#49457' '#48260#53948#51012' '#53364#47533#54616#49464#50836'.'
+        WordWrap = True
       end
       object rdoLunarDisplayDays10: TRadioButton
         Left = 22
-        Top = 63
+        Top = 129
         Width = 212
         Height = 22
         Margins.Left = 4
@@ -354,19 +360,17 @@
         Margins.Right = 4
         Margins.Bottom = 4
         Caption = '10'#51068' '#44036#44201#51004#47196' '#54364#49884
-        Checked = True
         Font.Charset = DEFAULT_CHARSET
         Font.Color = clWindowText
         Font.Height = -15
         Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
+        Font.Style = []
         ParentFont = False
         TabOrder = 0
-        TabStop = True
       end
       object rdoLunarDisplayDays15: TRadioButton
         Left = 22
-        Top = 126
+        Top = 192
         Width = 212
         Height = 22
         Margins.Left = 4
@@ -377,8 +381,8 @@
         TabOrder = 1
       end
       object rdoLunarDisplayDays5: TRadioButton
-        Left = 22
-        Top = 188
+        Left = 21
+        Top = 257
         Width = 212
         Height = 23
         Margins.Left = 4
@@ -386,11 +390,17 @@
         Margins.Right = 4
         Margins.Bottom = 4
         Caption = '5'#51068' '#44036#44201#51004#47196' '#54364#49884
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -14
+        Font.Name = 'Tahoma'
+        Font.Style = []
+        ParentFont = False
         TabOrder = 2
       end
       object rdoLunarDisplayDaysKor: TRadioButton
-        Left = 22
-        Top = 251
+        Left = 21
+        Top = 56
         Width = 212
         Height = 22
         Margins.Left = 4
@@ -398,7 +408,15 @@
         Margins.Right = 4
         Margins.Bottom = 4
         Caption = #51020#47141#51060#47492#51004#47196' '#54364#49884
+        Checked = True
+        Font.Charset = DEFAULT_CHARSET
+        Font.Color = clWindowText
+        Font.Height = -14
+        Font.Name = 'Tahoma'
+        Font.Style = [fsBold]
+        ParentFont = False
         TabOrder = 3
+        TabStop = True
       end
       object btnMakeLunarCalendar: TButton
         Left = 425
@@ -421,6 +439,10 @@
       Margins.Bottom = 4
       Caption = #44592#45392#51068' '#45804#47141' '#49373#49457
       ImageIndex = 1
+      ExplicitWidth = 602
+      DesignSize = (
+        605
+        361)
       object lblSpecified: TLabel
         Left = 4
         Top = 13
@@ -435,12 +457,13 @@
       object lvSpecified: TListView
         Left = 4
         Top = 48
-        Width = 445
-        Height = 190
+        Width = 597
+        Height = 264
         Margins.Left = 4
         Margins.Top = 4
         Margins.Right = 4
         Margins.Bottom = 4
+        Anchors = [akLeft, akTop, akRight, akBottom]
         Columns = <
           item
             Caption = #51020#47141#51068#51088
@@ -463,6 +486,7 @@
         RowSelect = True
         TabOrder = 2
         ViewStyle = vsReport
+        ExplicitWidth = 594
       end
       object btnAddSpecified: TButton
         Left = 425
