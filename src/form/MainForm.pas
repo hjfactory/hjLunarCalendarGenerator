@@ -66,6 +66,7 @@ type
     procedure btnMakeSpecifiedCalendarClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure edtOnlyNumericKeyPress(Sender: TObject; var Key: Char);
+    procedure btnAddSpecifiedClick(Sender: TObject);
   private
     { Private declarations }
     FMakeCalendar: TMakeCalendarController;
@@ -152,6 +153,13 @@ begin
   // 연도 4자 확인
 
   Result := True;
+end;
+
+procedure TfrmMain.btnAddSpecifiedClick(Sender: TObject);
+begin
+  frmSpecified := TfrmSpecified.Create(Self);
+
+
 end;
 
 //  1, 음력일자를 양력일자로 변경

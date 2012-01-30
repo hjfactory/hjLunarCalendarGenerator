@@ -277,7 +277,7 @@
     Top = 171
     Width = 469
     Height = 301
-    ActivePage = tsSpecified
+    ActivePage = tsLunar
     TabOrder = 3
     object tsLunar: TTabSheet
       Caption = #51020#47141' '#45804#47141' '#49373#49457
@@ -440,6 +440,7 @@
         Height = 25
         Caption = #52628#44032
         TabOrder = 0
+        OnClick = btnAddSpecifiedClick
       end
       object btnDelSpecified: TButton
         Left = 393
