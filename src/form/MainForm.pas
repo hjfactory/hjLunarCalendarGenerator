@@ -1,4 +1,4 @@
-unit Main;
+unit MainForm;
 
 interface
 
@@ -82,7 +82,8 @@ var
 implementation
 
 uses
-  ShellAPI, DateUtils, CalendarDataSaverToICS;
+  ShellAPI, DateUtils, CalendarDataSaverToICS,
+  SpecifiedForm;
 
 {$R *.dfm}
 
