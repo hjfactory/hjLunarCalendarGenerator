@@ -1,7 +1,6 @@
 program hjLunarCalendarGenerator;
 
 uses
-  ExceptionLog,
   Forms,
   CalendarCommons in 'caldata\CalendarCommons.pas',
   CalendarDataGenerator in 'caldata\CalendarDataGenerator.pas',
@@ -14,7 +13,8 @@ uses
   SpecifiedDateController in 'ctrl\SpecifiedDateController.pas',
   CalendarData in 'model\CalendarData.pas',
   MainForm in 'form\MainForm.pas' {frmMain},
-  SpecifiedForm in 'form\SpecifiedForm.pas' {frmSpecified};
+  SpecifiedForm in 'form\SpecifiedForm.pas' {frmSpecified},
+  SpecifiedData in 'model\SpecifiedData.pas';
 
 {$R *.res}
 
@@ -22,6 +22,5 @@ begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TfrmMain, frmMain);
-  Application.CreateForm(TfrmSpecified, frmSpecified);
   Application.Run;
 end.

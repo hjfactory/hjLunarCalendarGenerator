@@ -59,10 +59,10 @@ begin
   FDisplayDaysType := ADispType;
 
   case FDisplayDaysType of
-    lddt5:    SetData([1, 5, 10, 15, 20, 25, 99]);
-    lddt10:   SetData([1, 10, 20, 99]);
-    lddt15:   SetData([1, 15, 99]);
-    lddtKor:  SetData([1, 5, 10, 15, 20, 25, 99]);
+    lddtKor, lddt5:
+      SetData([1, 5, 10, 15, 20, 25, LunarLastDay]);
+    lddt10:   SetData([1, 10, 20, LunarLastDay]);
+    lddt15:   SetData([1, 15, LunarLastDay]);
   end;
 end;
 
@@ -116,9 +116,10 @@ begin
       case ALunar.Day of
       1:      Result := IfThen(ALunar.IsLeapMonth, 'À±', '') + LunarKoreanMonthName[ALunar.Month];
       15:     Result := LunarKoreanHalfMonth;
-      5, 10, 20, 25:
+      LunarLastDay:
+              Result := Format('%s(%d)', [LunarKoreanEndOfTheMonth, ALunar.Day]);
+      else
               Result := Format('%s%d.%d', [IfThen(ALunar.IsLeapMonth, '(À±)', ''), ALunar.Month, ALunar.Day]);
-      else    Result := Format('%s(%d)', [LunarKoreanEndOfTheMonth, ALunar.Day]);
       end;
     end;
   end;

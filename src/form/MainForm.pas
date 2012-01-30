@@ -155,13 +155,6 @@ begin
   Result := True;
 end;
 
-procedure TfrmMain.btnAddSpecifiedClick(Sender: TObject);
-begin
-  frmSpecified := TfrmSpecified.Create(Self);
-
-
-end;
-
 //  1, 음력일자를 양력일자로 변경
 procedure TfrmMain.btnLunarToSolarClick(Sender: TObject);
 var
@@ -248,8 +241,6 @@ procedure TfrmMain.edtOnlyNumericKeyPress(Sender: TObject; var Key: Char);
 begin
   if not (CharInSet(Key, ['0'..'9',#25,#08,#13])) then
     Key := #0;
-
-
 end;
 
 procedure TfrmMain.lblLunarDisplayDaysClick(Sender: TObject);
@@ -279,6 +270,21 @@ begin
   TLabel(Sender).Font.Style := TLabel(Sender).Font.Style - [fsUnderline];
   TLabel(Sender).Font.Color := clBlack;
   TLabel(Sender).Cursor := crDefault;
+end;
+
+procedure TfrmMain.btnAddSpecifiedClick(Sender: TObject);
+begin
+  frmSpecified := TfrmSpecified.Create(Self);
+  try
+    frmSpecified.Left := Self.Left + ((Self.Width - frmSpecified.Width ) div 2);
+    frmSpecified.top  := Self.Top + ((Self.Height - frmSpecified.Height ) div 2);
+    if frmSpecified.ShowModal = smrSave then
+    begin
+      ShowMessage('');
+    end;
+  finally
+    frmSpecified.Free;
+  end;
 end;
 
 end.
