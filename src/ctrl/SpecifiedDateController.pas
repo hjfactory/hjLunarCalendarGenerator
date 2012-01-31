@@ -3,15 +3,20 @@ unit SpecifiedDateController;
 interface
 
 uses
-  IniFiles;
+  IniFiles, SpecifiedData, SpecifiedDataSaver, SpecifiedDataLoader;
 
 type
   TSpecifiedDateController = class(TObject)
   private
-    FIniFile: TIniFile;
+    FSaver: TSpecifiedDataSaver;
+    FLoader: TSpecifiedDataLoader;
   public
     constructor Create;
     destructor Destroy; override;
+
+    procedure Append(AData: TSpecifiedData);
+    procedure Update(AData: TSpecifiedData);
+    procedure Delete(AData: TSpecifiedData);
   end;
 
 implementation
@@ -28,6 +33,21 @@ destructor TSpecifiedDateController.Destroy;
 begin
 
   inherited;
+end;
+
+procedure TSpecifiedDateController.Delete(AData: TSpecifiedData);
+begin
+
+end;
+
+procedure TSpecifiedDateController.Append(AData: TSpecifiedData);
+begin
+
+end;
+
+procedure TSpecifiedDateController.Update(AData: TSpecifiedData);
+begin
+
 end;
 
 end.

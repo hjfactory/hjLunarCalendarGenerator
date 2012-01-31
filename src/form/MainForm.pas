@@ -47,13 +47,13 @@ type
     Label13: TLabel;
     Label14: TLabel;
     chkLunarLeap: TCheckBox;
-    lblCopyright: TLabel;
     BalloonHint1: TBalloonHint;
     edtStartOfRange: TEdit;
     Label1: TLabel;
     edtEndOfRange: TEdit;
     Label2: TLabel;
     dlgSave: TSaveDialog;
+    btnAbout: TButton;
     procedure btnLunarToSolarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -67,6 +67,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure edtOnlyNumericKeyPress(Sender: TObject; var Key: Char);
     procedure btnAddSpecifiedClick(Sender: TObject);
+    procedure btnAboutClick(Sender: TObject);
   private
     { Private declarations }
     FMakeCalendar: TMakeCalendarController;
@@ -217,12 +218,7 @@ begin
     end;
 
     try
-      if FMakeCalendar.MakeLunarCalendar(
-            StartOfRange
-          , EndOfRange
-          , GetLunarDaysDisplayType
-          , dlgSave.FileName
-      ) then
+      if FMakeCalendar.MakeLunarCalendar(StartOfRange, EndOfRange, GetLunarDaysDisplayType, dlgSave.FileName) then
         ShowMessage('달력파일 생성을 완료하였습니다.');
     except on E: Exception do
       ShowMessage('달력파일 생성 중 오류가 발생했습니다.'#13#10 + Format('(오류내용: %s)', [E.Message]));
@@ -270,6 +266,18 @@ begin
   TLabel(Sender).Font.Style := TLabel(Sender).Font.Style - [fsUnderline];
   TLabel(Sender).Font.Color := clBlack;
   TLabel(Sender).Cursor := crDefault;
+end;
+
+procedure TfrmMain.btnAboutClick(Sender: TObject);
+var
+  msg: string;
+begin
+  msg := '이 프로그램은 델파이로 제작된 무료프로그램이며'#13#10
+       + '재배포 및 상업적 이용에 제한이 없습니다.'#13#10
+       + '이 프로그램으로 발생된 어떠한 문제에 대해서도'#13#10
+       + '제작자는 어떠한 책임도 지지 않습니다.';
+
+  ShowMessage(msg);
 end;
 
 procedure TfrmMain.btnAddSpecifiedClick(Sender: TObject);

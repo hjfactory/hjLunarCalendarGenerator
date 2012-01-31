@@ -14,13 +14,18 @@ uses
   CalendarData in 'model\CalendarData.pas',
   MainForm in 'form\MainForm.pas' {frmMain},
   SpecifiedForm in 'form\SpecifiedForm.pas' {frmSpecified},
-  SpecifiedData in 'model\SpecifiedData.pas';
+  SpecifiedData in 'model\SpecifiedData.pas',
+  SpecifiedDataSaver in 'specified\SpecifiedDataSaver.pas',
+  SpecifiedDataSaverToIni in 'specified\SpecifiedDataSaverToIni.pas',
+  SpecifiedDataLoader in 'specified\SpecifiedDataLoader.pas',
+  SpecifiedDataLoaderFromIni in 'specified\SpecifiedDataLoaderFromIni.pas';
 
 {$R *.res}
 
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
+  Application.Title := 'Lunar Calendar Generator';
   Application.CreateForm(TfrmMain, frmMain);
   Application.Run;
 end.

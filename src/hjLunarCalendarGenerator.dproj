@@ -20,6 +20,7 @@
 			<Base>true</Base>
 		</PropertyGroup>
 		<PropertyGroup Condition="'$(Base)'!=''">
+			<DCC_UsePackage>vcl;rtl;vclx;vclimg;vclactnband;dbrtl;vcldb;vcldbx;bdertl;vcltouch;xmlrtl;dsnap;dsnapcon;TeeUI;TeeDB;Tee;vclib;ibxpress;adortl;IndyCore;IndySystem;IndyProtocols;inet;intrawebdb_100_140;Intraweb_100_140;VclSmp;vclie;vclribbon;DbxClientDriver;DbxCommonDriver;DBXInterBaseDriver;DBXMySQLDriver;dbxcds;dbexpress;FixStartPage;VirtualTreesD13;D6Acm;OmniThreadLibraryRuntime2010;DSPackR;DirectX9_140</DCC_UsePackage>
 			<DCC_DependencyCheckOutputName>..\bin\hjLunarCalendarGenerator.exe</DCC_DependencyCheckOutputName>
 			<DCC_ImageBase>00400000</DCC_ImageBase>
 			<DCC_ExeOutput>../bin</DCC_ExeOutput>
@@ -63,6 +64,10 @@
 				<Form>frmSpecified</Form>
 			</DCCReference>
 			<DCCReference Include="model\SpecifiedData.pas"/>
+			<DCCReference Include="specified\SpecifiedDataSaver.pas"/>
+			<DCCReference Include="specified\SpecifiedDataSaverToIni.pas"/>
+			<DCCReference Include="specified\SpecifiedDataLoader.pas"/>
+			<DCCReference Include="specified\SpecifiedDataLoaderFromIni.pas"/>
 			<None Include="lib\LunarTableData.inc"/>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>
@@ -91,7 +96,7 @@
 						<Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
 					</Parameters>
 					<VersionInfo>
-						<VersionInfo Name="IncludeVerInfo">False</VersionInfo>
+						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
 						<VersionInfo Name="AutoIncBuild">False</VersionInfo>
 						<VersionInfo Name="MajorVer">1</VersionInfo>
 						<VersionInfo Name="MinorVer">0</VersionInfo>
@@ -106,8 +111,8 @@
 						<VersionInfo Name="CodePage">949</VersionInfo>
 					</VersionInfo>
 					<VersionInfoKeys>
-						<VersionInfoKeys Name="CompanyName"/>
-						<VersionInfoKeys Name="FileDescription"/>
+						<VersionInfoKeys Name="CompanyName">hjFactory</VersionInfoKeys>
+						<VersionInfoKeys Name="FileDescription">Lunar Calendar Generatro</VersionInfoKeys>
 						<VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName"/>
 						<VersionInfoKeys Name="LegalCopyright"/>
@@ -117,6 +122,14 @@
 						<VersionInfoKeys Name="ProductVersion">1.0.0.0</VersionInfoKeys>
 						<VersionInfoKeys Name="Comments"/>
 					</VersionInfoKeys>
+					<Excluded_Packages>
+						<Excluded_Packages Name="C:\Program Files (x86)\EurekaLog 6\Delphi14\ExceptionExpert14.bpl">EurekaLog</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dclwebsnap140.bpl">Embarcadero WebSnap Components</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dclnet140.bpl">Embarcadero Internet Components</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dclsoap140.bpl">Embarcadero SOAP Components</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dcloffice2k140.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dclofficexp140.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+					</Excluded_Packages>
 				</Delphi.Personality>
 			</BorlandProject>
 			<ProjectFileVersion>12</ProjectFileVersion>
