@@ -3,13 +3,12 @@ unit SpecifiedDateController;
 interface
 
 uses
-  IniFiles, SpecifiedData, SpecifiedDataSaver, SpecifiedDataLoader;
+  SpecifiedData, SpecifiedDataFile;
 
 type
   TSpecifiedDateController = class(TObject)
   private
-    FSaver: TSpecifiedDataSaver;
-    FLoader: TSpecifiedDataLoader;
+    FFile: TSpecifiedDataFile;
   public
     constructor Create;
     destructor Destroy; override;
@@ -21,12 +20,13 @@ type
 
 implementation
 
+//uses
+
+
 { TSpecifiedDateController }
 
 constructor TSpecifiedDateController.Create;
 begin
-//  FIniFile.ReadSections();
-//  Randomize
 end;
 
 destructor TSpecifiedDateController.Destroy;

@@ -1,6 +1,7 @@
 program hjLunarCalendarGenerator;
 
 uses
+  ExceptionLog,
   Forms,
   CalendarCommons in 'caldata\CalendarCommons.pas',
   CalendarDataGenerator in 'caldata\CalendarDataGenerator.pas',
@@ -15,10 +16,8 @@ uses
   MainForm in 'form\MainForm.pas' {frmMain},
   SpecifiedForm in 'form\SpecifiedForm.pas' {frmSpecified},
   SpecifiedData in 'model\SpecifiedData.pas',
-  SpecifiedDataSaver in 'specified\SpecifiedDataSaver.pas',
-  SpecifiedDataSaverToIni in 'specified\SpecifiedDataSaverToIni.pas',
-  SpecifiedDataLoader in 'specified\SpecifiedDataLoader.pas',
-  SpecifiedDataLoaderFromIni in 'specified\SpecifiedDataLoaderFromIni.pas';
+  SpecifiedDataFile in 'specified\SpecifiedDataFile.pas',
+  SpecifiedDataFileToIni in 'specified\SpecifiedDataFileToIni.pas';
 
 {$R *.res}
 

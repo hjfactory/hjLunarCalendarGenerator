@@ -49,6 +49,8 @@ procedure TestTCalendarDataSaver.TestSave;
 begin
   FCalendarDataSaver.BeginSave;
   FCalendarDataSaver.EndSave;
+
+  Check(False, 'test');
 end;
 
 procedure TestTCalendarDataSaver.TestAddData;
