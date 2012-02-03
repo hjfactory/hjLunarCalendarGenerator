@@ -17,7 +17,8 @@ uses
   SpecifiedForm in 'form\SpecifiedForm.pas' {frmSpecified},
   SpecifiedData in 'model\SpecifiedData.pas',
   SpecifiedDataFile in 'specified\SpecifiedDataFile.pas',
-  SpecifiedDataFileToIni in 'specified\SpecifiedDataFileToIni.pas';
+  SpecifiedDataFileToIni in 'specified\SpecifiedDataFileToIni.pas',
+  Environment in 'common\Environment.pas';
 
 {$R *.res}
 

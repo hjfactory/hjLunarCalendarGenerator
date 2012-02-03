@@ -64,9 +64,10 @@ end;
 
 procedure TfrmSpecified.btnCancelClick(Sender: TObject);
 begin
-  if    (edtLunarMonth.Text <> IntToStr(FData.Month))
+  if    Assigned(FData)
+    and ((edtLunarMonth.Text <> IntToStr(FData.Month))
     or  (edtLunarDay.Text <> IntToStr(FData.Day))
-    or  (edtSummury.Text <> FData.Summury) then
+    or  (edtSummury.Text <> FData.Summury)) then
   begin
     if Application.MessageBox(
       PChar('변경된 내용이 있습니다.'#13#10 +
@@ -103,6 +104,8 @@ var
 begin
   Day := IfThen(edtLUnarDay.Text = '말일', LunarLastDay, StrToInt(edtLUnarDay.Text));
 
+  Close;
+
   if not Assigned(FData) then
   begin
     FData := TSpecifiedData.Create('', StrToInt(edtLunarMonth.Text), Day, edtSummury.Text);
@@ -115,8 +118,6 @@ begin
     FData.Summury := edtSummury.Text;
     ModalResult := smrUpdate;
   end;
-
-  Close;
 end;
 
 procedure TfrmSpecified.chkLunarLastDayClick(Sender: TObject);
@@ -142,8 +143,11 @@ end;
 
 procedure TfrmSpecified.edtOnlyNumericKeyPress(Sender: TObject; var Key: Char);
 begin
-  if not (CharInSet(Key, ['0'..'9',#25,#08,#13])) then
+  if not (CharInSet(Key, ['0'..'9',#25,#8,#13])) then
     Key := #0;
+
+  if Length(TEdit(Sender).Text) = TEdit(Sender).MaxLength then
+    Key := #8;
 end;
 
 end.

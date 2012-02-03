@@ -8,46 +8,60 @@ uses
 type
   TSpecifiedDateController = class(TObject)
   private
-    FFile: TSpecifiedDataFile;
+    FDataList: TSpecifiedDataList;
+    FDataFile: TSpecifiedDataFile;
   public
     constructor Create;
     destructor Destroy; override;
 
-    procedure Append(AData: TSpecifiedData);
-    procedure Update(AData: TSpecifiedData);
-    procedure Delete(AData: TSpecifiedData);
+    function Append(AData: TSpecifiedData): Boolean;
+    function Update(AData: TSpecifiedData): Boolean;
+    function Delete(AData: TSpecifiedData): Boolean;
   end;
 
 implementation
 
-//uses
+uses
+  Environment, SpecifiedDataFileToIni;
 
 
 { TSpecifiedDateController }
 
 constructor TSpecifiedDateController.Create;
 begin
+  FDataList := TSpecifiedDataList.Create;
+  FDataFile := TSpecifiedDataFileToIni.Create(Env.SpecifiedFileName, FDataList);
 end;
 
 destructor TSpecifiedDateController.Destroy;
 begin
+  FDataFile.Free;
+  FDataList.Free;
 
   inherited;
 end;
 
-procedure TSpecifiedDateController.Delete(AData: TSpecifiedData);
+function TSpecifiedDateController.Append(AData: TSpecifiedData): Boolean;
 begin
-
+  Result := False;
+  try
+    AData := FDataList.AppendData(AData);
+    if AData.ID <> '' then
+      Result := FDataFile.Append(AData);
+  except
+    raise
+  end;
 end;
 
-procedure TSpecifiedDateController.Append(AData: TSpecifiedData);
+function TSpecifiedDateController.Update(AData: TSpecifiedData): Boolean;
 begin
-
+  Result := FDataFile.Update(AData);
 end;
 
-procedure TSpecifiedDateController.Update(AData: TSpecifiedData);
+function TSpecifiedDateController.Delete(AData: TSpecifiedData): Boolean;
 begin
-
+  FDataList.DeleteData(AData.ID);
+  Result := FDataFile.Delete(AData);
 end;
 
 end.

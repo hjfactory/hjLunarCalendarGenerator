@@ -66,6 +66,7 @@
 			<DCCReference Include="model\SpecifiedData.pas"/>
 			<DCCReference Include="specified\SpecifiedDataFile.pas"/>
 			<DCCReference Include="specified\SpecifiedDataFileToIni.pas"/>
+			<DCCReference Include="common\Environment.pas"/>
 			<None Include="lib\LunarTableData.inc"/>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>

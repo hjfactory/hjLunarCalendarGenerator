@@ -3,19 +3,20 @@ unit SpecifiedDataFileToIni;
 interface
 
 uses
-  IniFiles,
+  IniFiles, SysUtils, Forms,
   SpecifiedData, SpecifiedDataFile;
 
 type
   TSpecifiedDataFileToIni = class(TSpecifiedDataFile)
   private
     FIniFile: TIniFile;
-    FDataList: TSpecifiedList;
   public
-    constructor Create(APath: string; ADataList: TSpecifiedList);
+    constructor Create(APath: string; ADataList: TSpecifiedDataList);
     destructor Destroy; override;
 
-    procedure Save(AData: TSpecifiedData); override;
+    function Append(AData: TSpecifiedData): Boolean; override;
+    function Update(AData: TSpecifiedData): Boolean; override;
+    function Delete(AData: TSpecifiedData): Boolean; override;
     procedure Load; override;
   end;
 
@@ -23,12 +24,11 @@ implementation
 
 { TSpecifiedDataSaverToIni }
 
-constructor TSpecifiedDataFileToIni.Create(APath: string; ADataList: TSpecifiedList);
+constructor TSpecifiedDataFileToIni.Create(APath: string; ADataList: TSpecifiedDataList);
 begin
   inherited;
 
-  FIniFile := TIniFile.Create(FPath);
-  FDataList := ADataList;
+  FIniFile := TIniFile.Create(ExtractFilePath(Application.ExeName) +  FFilePath);
 
   Load;
 end;
@@ -40,12 +40,26 @@ begin
   inherited;
 end;
 
-procedure TSpecifiedDataFileToIni.Load;
+function TSpecifiedDataFileToIni.Append(AData: TSpecifiedData): Boolean;
+begin
+  FIniFile.WriteInteger(AData.ID, 'Month',   AData.Month);
+  FIniFile.WriteInteger(AData.ID, 'Day',     AData.Day);
+  FIniFile.WriteString(AData.ID, 'Summury', AData.Summury);
+
+  Result := True;
+end;
+
+function TSpecifiedDataFileToIni.Update(AData: TSpecifiedData): Boolean;
 begin
 
 end;
 
-procedure TSpecifiedDataFileToIni.Save(AData: TSpecifiedData);
+function TSpecifiedDataFileToIni.Delete(AData: TSpecifiedData): Boolean;
+begin
+
+end;
+
+procedure TSpecifiedDataFileToIni.Load;
 begin
 
 end;

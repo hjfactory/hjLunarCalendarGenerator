@@ -266,10 +266,6 @@
     TabOrder = 3
     object tsLunar: TTabSheet
       Caption = #51020#47141' '#45804#47141' '#49373#49457
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         461
         273)

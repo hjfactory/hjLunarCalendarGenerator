@@ -8,11 +8,14 @@ uses
 type
   TSpecifiedDataFile = class(TObject)
   protected
-    FPath: string;
+    FFilePath: string;
+    FDataList: TSpecifiedDataList;
   public
-    constructor Create(APath: string; ADataList: TSpecifiedList);
+    constructor Create(APath: string; ADataList: TSpecifiedDataList);
 
-    procedure Save(AData: TSpecifiedData); virtual; abstract;
+    function Append(AData: TSpecifiedData): Boolean; virtual; abstract;
+    function Update(AData: TSpecifiedData): Boolean; virtual; abstract;
+    function Delete(AData: TSpecifiedData): Boolean; virtual; abstract;
     procedure Load; virtual; abstract;
   end;
 
@@ -20,9 +23,10 @@ implementation
 
 { TSpecifiedDataFile }
 
-constructor TSpecifiedDataFile.Create(APath: string; ADataList: TSpecifiedList);
+constructor TSpecifiedDataFile.Create(APath: string; ADataList: TSpecifiedDataList);
 begin
-  FPath := APath;
+  FFilePath := APath;
+  FDataList := ADataList;
 end;
 
 end.

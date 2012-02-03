@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, MakeCalendarController, StdCtrls, ExtCtrls, ComCtrls,
-  CalendarCommons, hjLunarDateType;
+  Dialogs, StdCtrls, ExtCtrls, ComCtrls,
+  hjLunarDateType, CalendarCommons, MakeCalendarController, SpecifiedDateController;
 
 type
   TfrmMain = class(TForm)
@@ -70,7 +70,8 @@ type
     procedure btnAboutClick(Sender: TObject);
   private
     { Private declarations }
-    FMakeCalendar: TMakeCalendarController;
+    FMakeCalendarCtrl: TMakeCalendarController;
+    FSpecifiedDataCtrl: TSpecifiedDateController;
 
     function GetRangeYear(var AStart, AEnd: Word): Boolean;
     function GetLunarDaysDisplayType: TLunarDaysDisplayType;
@@ -91,7 +92,8 @@ uses
 
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
-  FMakeCalendar := TMakeCalendarController.Create;
+  FMakeCalendarCtrl   := TMakeCalendarController.Create;
+  FSpecifiedDataCtrl  := TSpecifiedDateController.Create;
 
   pgcCalendar.ActivePageIndex := 0;
 end;
@@ -105,7 +107,7 @@ begin
   DecodeDate(Now, Year, Month, Day);
 
   // 음력 기본 값 설정
-  Lunar := FMakeCalendar.SolarToLunar(DateRec(Year, Month, Day));
+  Lunar := FMakeCalendarCtrl.SolarToLunar(DateRec(Year, Month, Day));
   edtLunarYear.Text   := IntToStr(Lunar.Year);
   edtLunarMonth.Text  := IntToStr(Lunar.Month);
   edtLunarDay.Text    := IntToStr(Lunar.Day);
@@ -122,7 +124,8 @@ end;
 
 procedure TfrmMain.FormDestroy(Sender: TObject);
 begin
-  FMakeCalendar.Free;
+  FMakeCalendarCtrl.Free;
+  FSpecifiedDataCtrl.Free;
 end;
 
 function TfrmMain.GetLunarDaysDisplayType: TLunarDaysDisplayType;
@@ -131,7 +134,7 @@ begin
   else if rdoLunarDisplayDays10.Checked then  Result := lddt10
   else if rdoLunarDisplayDays15.Checked then  Result := lddt15
   else if rdoLunarDisplayDaysKor.Checked then Result := lddtKor
-  else                                        Result := lddt5
+  else { default }                            Result := lddt5
   ;
 end;
 
@@ -151,8 +154,6 @@ begin
 
   // 연도 범위 처리
 
-  // 연도 4자 확인
-
   Result := True;
 end;
 
@@ -168,7 +169,7 @@ begin
   Lunar.IsLeapMonth := chkLunarLeap.Checked;
 
   try
-    Solar := FMakeCalendar.LunarToSolar(Lunar);
+    Solar := FMakeCalendarCtrl.LunarToSolar(Lunar);
 
     ShowMessage(Format('음력 ''%d년 %d월 %d''일은'#13#10#13#10'양력 ''%d년 %d월 %d일'' 입니다.',
       [Lunar.Year, Lunar.Month, Lunar.Day, Solar.Year, Solar.Month, Solar.Day]));
@@ -188,7 +189,7 @@ begin
   Solar.Day   := StrToIntDef(edtSolarDay.Text, 0);
 
   try
-    Lunar := FMakeCalendar.SolarToLunar(Solar);
+    Lunar := FMakeCalendarCtrl.SolarToLunar(Solar);
 
     ShowMessage(Format('양력 ''%d년 %d월 %d일''은'#13#10#13#10'음력 ''%d년 %d월 %d''일 입니다.',
       [Solar.Year, Solar.Month, Solar.Day, Lunar.Year, Lunar.Month, Lunar.Day]));
@@ -218,7 +219,7 @@ begin
     end;
 
     try
-      if FMakeCalendar.MakeLunarCalendar(StartOfRange, EndOfRange, GetLunarDaysDisplayType, dlgSave.FileName) then
+      if FMakeCalendarCtrl.MakeLunarCalendar(StartOfRange, EndOfRange, GetLunarDaysDisplayType, dlgSave.FileName) then
         ShowMessage('달력파일 생성을 완료하였습니다.');
     except on E: Exception do
       ShowMessage('달력파일 생성 중 오류가 발생했습니다.'#13#10 + Format('(오류내용: %s)', [E.Message]));
@@ -228,7 +229,12 @@ end;
 
 //  4, 음력 기념일 달력 생성
 procedure TfrmMain.btnMakeSpecifiedCalendarClick(Sender: TObject);
+var
+  StartOfRange, EndOfRange: Word;
 begin
+  if not GetRangeYear(StartOfRange, EndOfRange) then
+    Exit;
+
   ShowMessage('준비 중');
 end;
 
@@ -281,14 +287,22 @@ begin
 end;
 
 procedure TfrmMain.btnAddSpecifiedClick(Sender: TObject);
+var
+  MR: Integer;
 begin
   frmSpecified := TfrmSpecified.Create(Self);
   try
     frmSpecified.Left := Self.Left + ((Self.Width - frmSpecified.Width ) div 2);
     frmSpecified.top  := Self.Top + ((Self.Height - frmSpecified.Height ) div 2);
-    if frmSpecified.ShowModal = smrSave then
-    begin
-      ShowMessage('');
+    MR := frmSpecified.ShowModal;
+
+    case MR of
+    smrSave:
+      FSpecifiedDataCtrl.Append(frmSpecified.Data);
+    smrUpdate:
+      FSpecifiedDataCtrl.Update(frmSpecified.Data);
+    smrDelete:
+      FSpecifiedDataCtrl.Delete(frmSpecified.Data);
     end;
   finally
     frmSpecified.Free;

@@ -22,7 +22,7 @@ type
     property Summury: string read FSummury write FSummury;
   end;
 
-  TSpecifiedList = class(TObject)
+  TSpecifiedDataList = class(TObject)
   private
     FList: TStringList;
     function Get(Index: Integer): TSpecifiedData;
@@ -53,7 +53,7 @@ begin
 
   Result := '';
   repeat
-    Result := Result + SEED[Random(Length(SEED)+1)];
+    Result := Result + SEED[Random(Length(SEED))];
   until (Length(Result) = Size);
 end;
 
@@ -70,12 +70,12 @@ end;
 
 { TSpecifiedList }
 
-constructor TSpecifiedList.Create;
+constructor TSpecifiedDataList.Create;
 begin
   FList := TStringList.Create;
 end;
 
-destructor TSpecifiedList.Destroy;
+destructor TSpecifiedDataList.Destroy;
 var
   I: Integer;
 begin
@@ -86,28 +86,28 @@ begin
   inherited;
 end;
 
-function TSpecifiedList.AppendData(const AMonth, ADay: Word; const ASummury: string): TSpecifiedData;
+function TSpecifiedDataList.AppendData(const AMonth, ADay: Word; const ASummury: string): TSpecifiedData;
 begin
   Result := TSpecifiedData.Create(RandomString, AMonth, ADay, ASummury);
 
   FList.AddObject(Result.ID, Result);
 end;
 
-function TSpecifiedList.AppendData(AData: TSpecifiedData): TSpecifiedData;
+function TSpecifiedDataList.AppendData(AData: TSpecifiedData): TSpecifiedData;
 begin
   Result := AData;
-  if AData.ID = '' then
-    AData.ID := RandomString;
+  if Result.ID = '' then
+    Result.ID := RandomString;
 
   FList.AddObject(Result.ID, Result);
 end;
 
-procedure TSpecifiedList.DeleteData(ID: string);
+procedure TSpecifiedDataList.DeleteData(ID: string);
 begin
   DeleteData(FList.IndexOf(ID));
 end;
 
-procedure TSpecifiedList.DeleteData(Index: Integer);
+procedure TSpecifiedDataList.DeleteData(Index: Integer);
 begin
   if Index > -1 then
   begin
@@ -116,14 +116,14 @@ begin
   end;
 end;
 
-function TSpecifiedList.Get(Index: Integer): TSpecifiedData;
+function TSpecifiedDataList.Get(Index: Integer): TSpecifiedData;
 begin
   Result := nil;
   if Index in [0..FList.count-1] then
     Result := TSpecifiedData(FList.Objects[Index]);
 end;
 
-function TSpecifiedList.GetID(Index: Integer): string;
+function TSpecifiedDataList.GetID(Index: Integer): string;
 begin
   Result := '';
   if Index in [0..FList.count-1] then
