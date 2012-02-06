@@ -55,7 +55,7 @@
 			<DCCReference Include="lib\hjLunarDateConverter.pas"/>
 			<DCCReference Include="lib\hjLunarDateType.pas"/>
 			<DCCReference Include="ctrl\MakeCalendarController.pas"/>
-			<DCCReference Include="ctrl\SpecifiedDateController.pas"/>
+			<DCCReference Include="ctrl\SpecifiedDataController.pas"/>
 			<DCCReference Include="model\CalendarData.pas"/>
 			<DCCReference Include="form\MainForm.pas">
 				<Form>frmMain</Form>

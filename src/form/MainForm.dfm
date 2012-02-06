@@ -179,6 +179,7 @@
       TabOrder = 0
       Text = '1980'
       OnKeyPress = edtOnlyNumericKeyPress
+      OnKeyUp = edtNextFocusKeyUp
     end
     object edtLunarMonth: TEdit
       Left = 147
@@ -190,6 +191,7 @@
       TabOrder = 1
       Text = '12'
       OnKeyPress = edtOnlyNumericKeyPress
+      OnKeyUp = edtNextFocusKeyUp
     end
     object edtLunarDay: TEdit
       Left = 208
@@ -201,6 +203,7 @@
       TabOrder = 2
       Text = '12'
       OnKeyPress = edtOnlyNumericKeyPress
+      OnKeyUp = edtNextFocusKeyUp
     end
     object btnSolarToLunar: TButton
       Left = 275
@@ -221,6 +224,7 @@
       TabOrder = 5
       Text = '1981'
       OnKeyPress = edtOnlyNumericKeyPress
+      OnKeyUp = edtNextFocusKeyUp
     end
     object edtSolarMonth: TEdit
       Left = 147
@@ -232,6 +236,7 @@
       TabOrder = 6
       Text = '1'
       OnKeyPress = edtOnlyNumericKeyPress
+      OnKeyUp = edtNextFocusKeyUp
     end
     object edtSolarDay: TEdit
       Left = 208
@@ -243,6 +248,7 @@
       TabOrder = 7
       Text = '17'
       OnKeyPress = edtOnlyNumericKeyPress
+      OnKeyUp = edtNextFocusKeyUp
     end
     object chkLunarLeap: TCheckBox
       Left = 81
@@ -386,9 +392,9 @@
         Caption = #44060#51064#51201#51064' '#44592#45392#51068#51012' '#52628#44032#54616#50668' '#45804#47141' '#54028#51068#51012' '#49373#49457
       end
       object lvSpecified: TListView
-        Left = 8
-        Top = 48
-        Width = 454
+        Left = 4
+        Top = 36
+        Width = 453
         Height = 202
         Margins.Left = 4
         Margins.Top = 4
@@ -403,18 +409,20 @@
           end
           item
             Caption = #44592#45392#51068' '#51333#47448
-            Width = 400
+            Width = 320
           end>
         GridLines = True
         Items.ItemData = {
           03AD0000000300000000000000FFFFFFFFFFFFFFFF01000000FFFFFFFF000000
           00073431413147313B31343139314731074131343147313B3134313931473100
-          000000FFFFFFFFFFFFFFFF01000000FFFFFFFF00000000084131343139314731
-          4131343139314731084131343139314731413134313931473100000000FFFFFF
-          FFFFFFFFFF01000000FFFFFFFF00000000074131343139314731413134313931
-          06413134313B31343139314731FFFFFFFFFFFF}
+          000000FFFFFFFFFFFFFFFF01000000FFFFFFFF00000000074131343139314731
+          41313431393106413134313B3134313931473100000000FFFFFFFFFFFFFFFF01
+          000000FFFFFFFF00000000084131343139314731413134313931473108413134
+          31393147314131343139314731FFFFFFFFFFFF}
+        MultiSelect = True
         ReadOnly = True
         RowSelect = True
+        SortType = stText
         TabOrder = 2
         ViewStyle = vsReport
       end
@@ -459,6 +467,7 @@
     MaxLength = 4
     TabOrder = 1
     OnKeyPress = edtOnlyNumericKeyPress
+    OnKeyUp = edtNextFocusKeyUp
   end
   object edtEndOfRange: TEdit
     Left = 130
@@ -473,6 +482,7 @@
     MaxLength = 4
     TabOrder = 2
     OnKeyPress = edtOnlyNumericKeyPress
+    OnKeyUp = edtNextFocusKeyUp
   end
   object btnAbout: TButton
     Left = 8

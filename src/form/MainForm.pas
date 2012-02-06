@@ -5,7 +5,8 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ExtCtrls, ComCtrls,
-  hjLunarDateType, CalendarCommons, MakeCalendarController, SpecifiedDateController;
+  hjLunarDateType, CalendarCommons, MakeCalendarController,
+  SpecifiedData, SpecifiedDataController;
 
 type
   TfrmMain = class(TForm)
@@ -68,13 +69,23 @@ type
     procedure edtOnlyNumericKeyPress(Sender: TObject; var Key: Char);
     procedure btnAddSpecifiedClick(Sender: TObject);
     procedure btnAboutClick(Sender: TObject);
+    procedure edtNextFocusKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     { Private declarations }
     FMakeCalendarCtrl: TMakeCalendarController;
     FSpecifiedDataCtrl: TSpecifiedDateController;
 
+    // 음력달력 생성
     function GetRangeYear(var AStart, AEnd: Word): Boolean;
     function GetLunarDaysDisplayType: TLunarDaysDisplayType;
+
+    // 기념일 달력 생성
+    procedure LoadSpecifiedData;
+
+    procedure AppendSpecifiedData(AData: TSpecifiedData);
+    procedure DeleteSpecifiedData(AData: TSpecifiedData);
+    procedure UpdateSpecifiedData(AData: TSpecifiedData);
   public
     { Public declarations }
   end;
@@ -120,22 +131,15 @@ begin
   // 대상 연도 설정
   edtStartOfRange.Text  := IntToStr(Year);
   edtEndOfRange.Text    := IntToStr(Year + 50);
+
+  lvSpecified.Clear;
+  LoadSpecifiedData;
 end;
 
 procedure TfrmMain.FormDestroy(Sender: TObject);
 begin
   FMakeCalendarCtrl.Free;
   FSpecifiedDataCtrl.Free;
-end;
-
-function TfrmMain.GetLunarDaysDisplayType: TLunarDaysDisplayType;
-begin
-  if rdoLunarDisplayDays5.Checked then        Result := lddt5
-  else if rdoLunarDisplayDays10.Checked then  Result := lddt10
-  else if rdoLunarDisplayDays15.Checked then  Result := lddt15
-  else if rdoLunarDisplayDaysKor.Checked then Result := lddtKor
-  else { default }                            Result := lddt5
-  ;
 end;
 
 function TfrmMain.GetRangeYear(var AStart, AEnd: Word): Boolean;
@@ -155,6 +159,54 @@ begin
   // 연도 범위 처리
 
   Result := True;
+end;
+
+// 숫자만 입력
+procedure TfrmMain.edtNextFocusKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Length(TEdit(Sender).Text) = TEdit(Sender).MaxLength then
+  begin
+    Key := 0;
+    SelectNext(Sender as TWinControl, True, True);
+  end;
+end;
+
+procedure TfrmMain.edtOnlyNumericKeyPress(Sender: TObject; var Key: Char);
+begin
+  if not (CharInSet(Key, ['0'..'9',#25,#08,#13])) then
+    Key := #0;
+end;
+
+procedure TfrmMain.lblBlogClick(Sender: TObject);
+begin
+  ShellExecute(Handle, 'open', PChar(TLabel(Sender).Caption), nil, nil, SW_SHOW);
+end;
+
+procedure TfrmMain.lblBlogMouseEnter(Sender: TObject);
+begin
+  TLabel(Sender).Font.Style := TLabel(Sender).Font.Style + [fsUnderline];
+  TLabel(Sender).Font.Color := clBlue;
+  TLabel(Sender).Cursor := crHandPoint;
+end;
+
+procedure TfrmMain.lblBlogMouseLeave(Sender: TObject);
+begin
+  TLabel(Sender).Font.Style := TLabel(Sender).Font.Style - [fsUnderline];
+  TLabel(Sender).Font.Color := clBlack;
+  TLabel(Sender).Cursor := crDefault;
+end;
+
+procedure TfrmMain.btnAboutClick(Sender: TObject);
+var
+  msg: string;
+begin
+  msg := '이 프로그램은 델파이로 제작된 무료프로그램이며'#13#10
+       + '재배포 및 상업적 이용에 제한이 없습니다.'#13#10
+       + '이 프로그램으로 발생된 어떠한 문제에 대해서도'#13#10
+       + '제작자는 어떠한 책임도 지지 않습니다.';
+
+  ShowMessage(msg);
 end;
 
 //  1, 음력일자를 양력일자로 변경
@@ -238,11 +290,14 @@ begin
   ShowMessage('준비 중');
 end;
 
-// 숫자만 입력
-procedure TfrmMain.edtOnlyNumericKeyPress(Sender: TObject; var Key: Char);
+function TfrmMain.GetLunarDaysDisplayType: TLunarDaysDisplayType;
 begin
-  if not (CharInSet(Key, ['0'..'9',#25,#08,#13])) then
-    Key := #0;
+  if rdoLunarDisplayDays5.Checked then        Result := lddt5
+  else if rdoLunarDisplayDays10.Checked then  Result := lddt10
+  else if rdoLunarDisplayDays15.Checked then  Result := lddt15
+  else if rdoLunarDisplayDaysKor.Checked then Result := lddtKor
+  else { default }                            Result := lddt5
+  ;
 end;
 
 procedure TfrmMain.lblLunarDisplayDaysClick(Sender: TObject);
@@ -253,37 +308,6 @@ begin
   if lbl = lblLunarDisplayDays15 then   rdoLunarDisplayDays15.Checked := True;
   if lbl = lblLunarDisplayDays5 then    rdoLunarDisplayDays5.Checked := True;
   if lbl = lblLunarDisplayDaysKor then  rdoLunarDisplayDaysKor.Checked := True;
-end;
-
-procedure TfrmMain.lblBlogClick(Sender: TObject);
-begin
-  ShellExecute(Handle, 'open', PChar(TLabel(Sender).Caption), nil, nil, SW_SHOW);
-end;
-
-procedure TfrmMain.lblBlogMouseEnter(Sender: TObject);
-begin
-  TLabel(Sender).Font.Style := TLabel(Sender).Font.Style + [fsUnderline];
-  TLabel(Sender).Font.Color := clBlue;
-  TLabel(Sender).Cursor := crHandPoint;
-end;
-
-procedure TfrmMain.lblBlogMouseLeave(Sender: TObject);
-begin
-  TLabel(Sender).Font.Style := TLabel(Sender).Font.Style - [fsUnderline];
-  TLabel(Sender).Font.Color := clBlack;
-  TLabel(Sender).Cursor := crDefault;
-end;
-
-procedure TfrmMain.btnAboutClick(Sender: TObject);
-var
-  msg: string;
-begin
-  msg := '이 프로그램은 델파이로 제작된 무료프로그램이며'#13#10
-       + '재배포 및 상업적 이용에 제한이 없습니다.'#13#10
-       + '이 프로그램으로 발생된 어떠한 문제에 대해서도'#13#10
-       + '제작자는 어떠한 책임도 지지 않습니다.';
-
-  ShowMessage(msg);
 end;
 
 procedure TfrmMain.btnAddSpecifiedClick(Sender: TObject);
@@ -298,15 +322,79 @@ begin
 
     case MR of
     smrSave:
-      FSpecifiedDataCtrl.Append(frmSpecified.Data);
+      AppendSpecifiedData(frmSpecified.Data);
     smrUpdate:
-      FSpecifiedDataCtrl.Update(frmSpecified.Data);
+      UpdateSpecifiedData(frmSpecified.Data);
     smrDelete:
-      FSpecifiedDataCtrl.Delete(frmSpecified.Data);
+      DeleteSpecifiedData(frmSpecified.Data);
     end;
   finally
     frmSpecified.Free;
   end;
+end;
+
+// 기념일 데이터 표시
+procedure TfrmMain.LoadSpecifiedData;
+var
+  I: Integer;
+  Data: TSpecifiedData;
+  Item: TListItem;
+begin
+  lvSpecified.Clear;
+  for I := 0 to FSpecifiedDataCtrl.Count - 1 do
+  begin
+    Data := FSpecifiedDataCtrl[I];
+    Item := lvSpecified.Items.Add;
+    Item.Caption := Format('%.2d월 %s일', [Data.Month, Data.DayStr]);
+    Item.SubItems.Add(Data.Summury);
+    Item.Data := Data;
+  end;
+end;
+
+// 기념일 추가
+procedure TfrmMain.AppendSpecifiedData(AData: TSpecifiedData);
+var
+  I: Integer;
+  msg: string;
+  Datas: TSpecifiedDatas;
+
+  Item: TListItem;
+begin
+  if not Assigned(AData) then
+    Exit;
+
+  Datas := FSpecifiedDataCtrl.GetDatas(AData.Month, AData.Day);
+
+  if Datas.Count > 0 then
+  begin
+    msg := Format('[%d월 %s일]에는 이미 %d개의 기념일이 등록되어 있습니다.', [AData.Month, AData.DayStr, Datas.Count]);
+    for I := 0 to Datas.Count - 1 do
+      msg := msg + Format(#13#10' - %s', [Datas[I].Summury]);
+    msg := msg + #13#10#13#10'추가로 기념일을 등록하시겠습니까?';
+
+    if Application.MessageBox(PChar(msg), PChar('hjLunarCalendarGenerator'), MB_ICONQUESTION OR MB_YESNO) = ID_NO then
+      Exit;
+  end;
+
+  if FSpecifiedDataCtrl.AppendData(AData) then
+  begin
+    Item := lvSpecified.Items.Add;
+    Item.Caption := Format('%.2d월 %s일', [AData.Month, AData.DayStr]);
+    Item.SubItems.Add(AData.Summury);
+    Item.Data := AData;
+  end;
+end;
+
+// 기념일 삭제(단건)
+procedure TfrmMain.DeleteSpecifiedData(AData: TSpecifiedData);
+begin
+      FSpecifiedDataCtrl.DeleteData(AData);
+end;
+
+// 기념일 수정(갱신)
+procedure TfrmMain.UpdateSpecifiedData(AData: TSpecifiedData);
+begin
+      FSpecifiedDataCtrl.UpdateData(AData);
 end;
 
 end.

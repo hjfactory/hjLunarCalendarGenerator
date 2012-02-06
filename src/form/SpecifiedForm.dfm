@@ -83,6 +83,7 @@ object frmSpecified: TfrmSpecified
     MaxLength = 2
     TabOrder = 0
     OnKeyPress = edtOnlyNumericKeyPress
+    OnKeyUp = edtNextFocusKeyUp
   end
   object edtLunarDay: TEdit
     Left = 136
@@ -98,6 +99,7 @@ object frmSpecified: TfrmSpecified
     TabOrder = 1
     OnExit = edtLunarDayExit
     OnKeyPress = edtOnlyNumericKeyPress
+    OnKeyUp = edtNextFocusKeyUp
   end
   object edtSummury: TEdit
     Left = 70

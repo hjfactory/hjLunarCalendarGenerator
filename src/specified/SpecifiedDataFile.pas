@@ -9,24 +9,23 @@ type
   TSpecifiedDataFile = class(TObject)
   protected
     FFilePath: string;
-    FDataList: TSpecifiedDataList;
   public
-    constructor Create(APath: string; ADataList: TSpecifiedDataList);
+    constructor Create(APath: string);
 
     function Append(AData: TSpecifiedData): Boolean; virtual; abstract;
     function Update(AData: TSpecifiedData): Boolean; virtual; abstract;
     function Delete(AData: TSpecifiedData): Boolean; virtual; abstract;
-    procedure Load; virtual; abstract;
+
+    procedure Load(ADataList: TSpecifiedDataList); virtual; abstract;
   end;
 
 implementation
 
 { TSpecifiedDataFile }
 
-constructor TSpecifiedDataFile.Create(APath: string; ADataList: TSpecifiedDataList);
+constructor TSpecifiedDataFile.Create(APath: string);
 begin
   FFilePath := APath;
-  FDataList := ADataList;
 end;
 
 end.

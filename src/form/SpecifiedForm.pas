@@ -4,7 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, SpecifiedData;
+  Dialogs, StdCtrls,
+  SpecifiedData, SpecifiedDataController;
 
 const
   smrSave   = 20;
@@ -33,12 +34,14 @@ type
     procedure btnSaveClick(Sender: TObject);
     procedure btnDeleteClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
+    procedure edtNextFocusKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     FData: TSpecifiedData;
-    { Private declarations }
+    FDataCtrl: TSpecifiedDateController;
   public
-    { Public declarations }
     property Data: TSpecifiedData read FData write FData;
+    property DataCtrl: TSpecifiedDateController read FDataCtrl write FDataCtrl;
   end;
 
 var
@@ -56,7 +59,7 @@ begin
   if Assigned(FData) then
   begin
     edtLunarMonth.Text  := IntToStr(FData.Month);
-    edtLunarDay.Text    := IfThen(FData.Day = LunarLastDay, '富老', IntToStr(FData.Day));
+    edtLunarDay.Text    := FData.DayStr;
     chkLunarLastDay.Checked := FData.Day = LunarLastDay;
     edtSummury.Text     := FData.Summury;
   end;
@@ -102,7 +105,7 @@ procedure TfrmSpecified.btnSaveClick(Sender: TObject);
 var
   Day: Integer;
 begin
-  Day := IfThen(edtLUnarDay.Text = '富老', LunarLastDay, StrToInt(edtLUnarDay.Text));
+  Day := IfThen(edtLUnarDay.Text = LunarLastDayStr, LunarLastDay, StrToInt(edtLUnarDay.Text));
 
   Close;
 
@@ -123,7 +126,7 @@ end;
 procedure TfrmSpecified.chkLunarLastDayClick(Sender: TObject);
 begin
   edtLunarDay.Enabled := not TCheckbox(Sender).Checked;
-  edtLunarDay.Text    := IfThen(TCheckbox(Sender).Checked, '富老', '');
+  edtLunarDay.Text    := IfThen(TCheckbox(Sender).Checked, LunarLastDayStr, '');
 end;
 
 procedure TfrmSpecified.edtLunarDayExit(Sender: TObject);
@@ -141,13 +144,20 @@ begin
   end;
 end;
 
+procedure TfrmSpecified.edtNextFocusKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Length(TEdit(Sender).Text) = TEdit(Sender).MaxLength then
+  begin
+    Key := 0;
+    SelectNext(Sender as TWinControl, True, True);
+  end;
+end;
+
 procedure TfrmSpecified.edtOnlyNumericKeyPress(Sender: TObject; var Key: Char);
 begin
   if not (CharInSet(Key, ['0'..'9',#25,#8,#13])) then
     Key := #0;
-
-  if Length(TEdit(Sender).Text) = TEdit(Sender).MaxLength then
-    Key := #8;
 end;
 
 end.
