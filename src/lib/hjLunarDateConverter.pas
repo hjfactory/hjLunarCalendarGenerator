@@ -28,10 +28,14 @@ type
     function GetLunarDaysOfMonth(AYear, AMonth: Word; AIsLeapMonth: Boolean): Word;
     function InvalidMonthIndex(AYear: Word; AIndexOfMonth: Integer): Boolean;
     function GetLunarMonthFromMonthIndex(AYear: Word; AIndexOfMonth: Integer; var AMonth: Word; var AIsLeapMonth: Boolean): Boolean;
-
-    function GetSupportSolarPriod: string;
-    function GetSupportLunarPriod: string;
-    function GetSupportLunarYear: string;
+//
+//    function GetSupportSolarPriod: string;
+//    function GetSupportLunarPriod: string;
+//    function GetSupportLunarYear: string;
+    function SupportLunarStart: TLunarDateRec;
+    function SupportLunarEnd: TLunarDateRec;
+    function SupportSolarStart: TSolarDateRec;
+    function SupportSolarEnd: TSolarDateRec;
   end;
 
 implementation
@@ -53,21 +57,6 @@ destructor ThjLunarDateConverter.Destroy;
 begin
 
   inherited;
-end;
-
-function ThjLunarDateConverter.GetSupportLunarPriod: string;
-begin
-  Result := Format('%s-1-1~%s-12-31)', [SupportYearStart, SupportYearEnd]);
-end;
-
-function ThjLunarDateConverter.GetSupportLunarYear: string;
-begin
-  Result := Format('%s~%s)', [SupportYearStart, SupportYearEnd]);
-end;
-
-function ThjLunarDateConverter.GetSupportSolarPriod: string;
-begin
-  Result := SupportSolarDateStartStr + '~' + SupportSolarDateEndStr;
 end;
 
 procedure ThjLunarDateConverter.RangeError(const Msg: string);
@@ -342,6 +331,26 @@ begin
 
   // STEP 7
   Result.Day := DayCount;
+end;
+
+function ThjLunarDateConverter.SupportLunarStart: TLunarDateRec;
+begin
+  Result := DateRec(SupportYearStart, 1, 1, False);
+end;
+
+function ThjLunarDateConverter.SupportLunarEnd: TLunarDateRec;
+begin
+  Result := DateRec(SupportYearEnd, 12, GetLunarDaysOfMonth(SupportYearEnd, 12, False), False);
+end;
+
+function ThjLunarDateConverter.SupportSolarStart: TSolarDateRec;
+begin
+  Result := DateRec(SupportSolarDateStartYear, SupportSolarDateStartMonth, SupportSolarDateStartDay);
+end;
+
+function ThjLunarDateConverter.SupportSolarEnd: TSolarDateRec;
+begin
+  Result := DateRec(SupportSolarDateEndYear, SupportSolarDateEndMonth, SupportSolarDateEndDay);
 end;
 
 procedure ThjLunarDateConverter.TestData;

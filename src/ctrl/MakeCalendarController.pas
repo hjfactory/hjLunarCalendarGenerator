@@ -4,7 +4,8 @@ interface
 
 uses
   hjLunarDateType, hjLunarDateConverter, Classes, Windows, SysUtils,
-  CalendarCommons, CalendarDataGenerator, CalendarDataSaver;
+  CalendarCommons, CalendarDataGenerator, CalendarDataSaver,
+  SpecifiedData;
 
 type
   TMakeCalendarController = class(TObject)
@@ -20,15 +21,16 @@ type
     function LunarToSolar(ADate: TLunarDateRec): TSolarDateRec;
 
     function MakeLunarCalendar(AStartOfRange, AEndOfRange: Word; ADisplayType: TLunarDaysDisplayType; APath: string): Boolean;
-    function MakeSpecifiedCalendar(AStartOfRange, AEndOfRange: Word; APath: string): Boolean;
+    function MakeSpecifiedCalendar(AStartOfRange, AEndOfRange: Word; ADataList: TSpecifiedDataList; APath: string): Boolean;
 
-    function SupportRange: string;
+    function SupportRangeYear(AYear: Word; var Msg: string): boolean;
   end;
 
 implementation
 
 uses
   LunarCalendarDataGenerator,
+  SpecifiedCalendarDataGenerator,
   CalendarData,
   CalendarDataSaverToICS;
 
@@ -64,9 +66,14 @@ begin
   end;
 end;
 
-function TMakeCalendarController.SupportRange: string;
+function TMakeCalendarController.SupportRangeYear(AYear: Word;
+  var Msg: string): boolean;
 begin
-  Result := Format('', [FLunDataConv.GetSupportLunarPriod]);
+  Result := (AYear >= FLunDataConv.SupportLunarStart.Year) and (AYear <= FLunDataConv.SupportLunarEnd.Year);
+
+//  AYear in [..FLunDataConv.SupportLunarEnd.Year];
+  if not Result then
+    Msg := Format('''%d''년도는 지원하지 않습니다.'#13#10'(지원기간: %d년 ~ %d년)', [AYear, FLunDataConv.SupportLunarStart.Year, FLunDataConv.SupportLunarEnd.Year]);
 end;
 
 // 달력 생성
@@ -129,9 +136,22 @@ begin
 end;
 
 function TMakeCalendarController.MakeSpecifiedCalendar(AStartOfRange, AEndOfRange: Word;
-  APath: string): Boolean;
+  ADataList: TSpecifiedDataList; APath: string): Boolean;
+var
+  Source: TSpecifiedCalendarSource;
+  Generator: TSpecifiedCalendarDataGenerator;
+  Saver: TCalendarSaverToICS;
 begin
-  Result := False;
+  Source    := TSpecifiedCalendarSource.Create(ADataList);
+  Generator := TSpecifiedCalendarDataGenerator.Create(Source, AStartOfRange, AendOfRange);
+  Saver     := TCalendarSaverToICS.Create(APath);
+  try
+    Result := MakeCalendar(Generator, Saver);
+  finally
+    Source.Free;
+    Generator.Free;
+    Saver.Free;
+  end;
 end;
 
 end.

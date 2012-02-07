@@ -48,7 +48,6 @@ type
     Label13: TLabel;
     Label14: TLabel;
     chkLunarLeap: TCheckBox;
-    BalloonHint1: TBalloonHint;
     edtStartOfRange: TEdit;
     Label1: TLabel;
     edtEndOfRange: TEdit;
@@ -71,6 +70,7 @@ type
     procedure btnAboutClick(Sender: TObject);
     procedure edtNextFocusKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure lvSpecifiedDblClick(Sender: TObject);
   private
     { Private declarations }
     FMakeCalendarCtrl: TMakeCalendarController;
@@ -81,7 +81,8 @@ type
     function GetLunarDaysDisplayType: TLunarDaysDisplayType;
 
     // 기념일 달력 생성
-    procedure LoadSpecifiedData;
+    procedure DisplaySpecifiedData;
+    procedure ShowSpecifiedDialog(AData: TSpecifiedData);
 
     procedure AppendSpecifiedData(AData: TSpecifiedData);
     procedure DeleteSpecifiedData(AData: TSpecifiedData);
@@ -101,6 +102,33 @@ uses
 
 {$R *.dfm}
 
+function GetApplicationVersion(var Major, Minor, Release, Build: Word): Boolean;
+var
+  VerInfoSize: DWord;
+  VerInfo: Pointer;
+  VerValueSize: DWord;
+  VerValue: PVSFixedFileInfo;
+  Dummy: DWord;
+begin
+  VerInfoSize := GetFileVersionInfoSize(PChar(Application.ExeName), dummy);
+  GetMem(VerInfo, VerInfoSize);
+  try
+    GetFileVersionInfo(PChar(Application.ExeName), 0, VerInfoSize, VerInfo);
+    VerQueryValue(VerInfo, '\', Pointer(VerValue), VerValueSize);
+    with VerValue^ do
+    begin
+      Major   := dwFileVersionMS shr 16;
+      Minor   := dwFileVersionMS and $FFFF;
+      Release := dwFileVersionLS shr 16;
+      Build   := dwFileVersionLS and $FFFF;
+    end;
+
+    Result := True;
+  finally
+    FreeMem(VerInfo, VerInfoSize);
+  end;
+end;
+
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
   FMakeCalendarCtrl   := TMakeCalendarController.Create;
@@ -113,7 +141,12 @@ procedure TfrmMain.FormShow(Sender: TObject);
 var
   Lunar: TLunarDateRec;
   Year, Month, Day: Word;
+  V1, V2, V3, V4: Word;
 begin
+
+  if GetApplicationVersion(V1, V2, V3, V4) then
+    Caption := Caption + Format('(ver.%d.%d.%d)', [V1, V2, V3]);
+
   // 오늘 일자
   DecodeDate(Now, Year, Month, Day);
 
@@ -133,7 +166,7 @@ begin
   edtEndOfRange.Text    := IntToStr(Year + 50);
 
   lvSpecified.Clear;
-  LoadSpecifiedData;
+  DisplaySpecifiedData;
 end;
 
 procedure TfrmMain.FormDestroy(Sender: TObject);
@@ -143,6 +176,8 @@ begin
 end;
 
 function TfrmMain.GetRangeYear(var AStart, AEnd: Word): Boolean;
+var
+  Msg: string;
 begin
   Result := False;
 
@@ -157,6 +192,17 @@ begin
   end;
 
   // 연도 범위 처리
+  if not FMakeCalendarCtrl.SupportRangeYear(AStart, Msg) then
+  begin
+    ShowMessage(Msg);
+    Exit;
+  end;
+
+  if not FMakeCalendarCtrl.SupportRangeYear(AEnd, Msg) then
+  begin
+    ShowMessage(Msg);
+    Exit;
+  end;
 
   Result := True;
 end;
@@ -202,9 +248,10 @@ var
   msg: string;
 begin
   msg := '이 프로그램은 델파이로 제작된 무료프로그램이며'#13#10
-       + '재배포 및 상업적 이용에 제한이 없습니다.'#13#10
-       + '이 프로그램으로 발생된 어떠한 문제에 대해서도'#13#10
-       + '제작자는 어떠한 책임도 지지 않습니다.';
+       + '재배포 및 상업적 이용에 제한이 없습니다.'#13#10#13#10
+       + '이 프로그램으로 발생된 어떠한 종류의 문제에도'#13#10
+       + '제작자는 아무런 책임도 지지 않습니다.'#13#10#13#10
+  ;
 
   ShowMessage(msg);
 end;
@@ -287,7 +334,25 @@ begin
   if not GetRangeYear(StartOfRange, EndOfRange) then
     Exit;
 
-  ShowMessage('준비 중');
+  dlgsave.InitialDir := ExtractFilePath(Application.ExeName);
+  dlgSave.FileName := Format('specfiedcalendar_%d-%d.ics', [StartOfRange, EndOfRange]);
+  if dlgSave.Execute then
+  begin
+    if FileExists(dlgSave.FileName) then
+    begin
+      if Application.MessageBox(PChar(Format('%s 파일이 이미 존재합니다.'#13#10'이 파일을 바꾸시겠습니까?', [dlgSave.Filename])), PChar('hjLunarCalendarGenerator'), MB_ICONQUESTION OR MB_YESNO) = ID_NO then
+      begin
+        Exit;
+      end;
+    end;
+
+    try
+      if FMakeCalendarCtrl.MakeSpecifiedCalendar(StartOfRange, EndOfRange, FSpecifiedDataCtrl.DataList, dlgSave.FileName) then
+        ShowMessage('달력파일 생성을 완료하였습니다.');
+    except on E: Exception do
+      ShowMessage('달력파일 생성 중 오류가 발생했습니다.'#13#10 + Format('(오류내용: %s)', [E.Message]));
+    end;
+  end;
 end;
 
 function TfrmMain.GetLunarDaysDisplayType: TLunarDaysDisplayType;
@@ -310,7 +375,25 @@ begin
   if lbl = lblLunarDisplayDaysKor then  rdoLunarDisplayDaysKor.Checked := True;
 end;
 
-procedure TfrmMain.btnAddSpecifiedClick(Sender: TObject);
+// 기념일 데이터 표시
+procedure TfrmMain.DisplaySpecifiedData;
+var
+  I: Integer;
+  Data: TSpecifiedData;
+  Item: TListItem;
+begin
+  lvSpecified.Clear;
+  for I := 0 to FSpecifiedDataCtrl.Count - 1 do
+  begin
+    Data := FSpecifiedDataCtrl[I];
+    Item := lvSpecified.Items.Add;
+    Item.Caption := Format('%.2d월 %s일', [Data.Month, Data.DayStr]);
+    Item.SubItems.Add(Data.Summary);
+    Item.Data := Data;
+  end;
+end;
+
+procedure TfrmMain.ShowSpecifiedDialog(AData: TSpecifiedData);
 var
   MR: Integer;
 begin
@@ -318,6 +401,7 @@ begin
   try
     frmSpecified.Left := Self.Left + ((Self.Width - frmSpecified.Width ) div 2);
     frmSpecified.top  := Self.Top + ((Self.Height - frmSpecified.Height ) div 2);
+    frmSpecified.Data := AData;
     MR := frmSpecified.ShowModal;
 
     case MR of
@@ -333,21 +417,21 @@ begin
   end;
 end;
 
-// 기념일 데이터 표시
-procedure TfrmMain.LoadSpecifiedData;
+// 일정 추가
+procedure TfrmMain.btnAddSpecifiedClick(Sender: TObject);
+begin
+  ShowSpecifiedDialog(nil);
+end;
+
+// 일정 수정
+procedure TfrmMain.lvSpecifiedDblClick(Sender: TObject);
 var
-  I: Integer;
-  Data: TSpecifiedData;
   Item: TListItem;
 begin
-  lvSpecified.Clear;
-  for I := 0 to FSpecifiedDataCtrl.Count - 1 do
+  Item := TListView(Sender).Selected;
+  if Assigned(Item) then
   begin
-    Data := FSpecifiedDataCtrl[I];
-    Item := lvSpecified.Items.Add;
-    Item.Caption := Format('%.2d월 %s일', [Data.Month, Data.DayStr]);
-    Item.SubItems.Add(Data.Summury);
-    Item.Data := Data;
+    ShowSpecifiedDialog(Item.Data);
   end;
 end;
 
@@ -369,7 +453,7 @@ begin
   begin
     msg := Format('[%d월 %s일]에는 이미 %d개의 기념일이 등록되어 있습니다.', [AData.Month, AData.DayStr, Datas.Count]);
     for I := 0 to Datas.Count - 1 do
-      msg := msg + Format(#13#10' - %s', [Datas[I].Summury]);
+      msg := msg + Format(#13#10' - %s', [Datas[I].Summary]);
     msg := msg + #13#10#13#10'추가로 기념일을 등록하시겠습니까?';
 
     if Application.MessageBox(PChar(msg), PChar('hjLunarCalendarGenerator'), MB_ICONQUESTION OR MB_YESNO) = ID_NO then
@@ -380,21 +464,40 @@ begin
   begin
     Item := lvSpecified.Items.Add;
     Item.Caption := Format('%.2d월 %s일', [AData.Month, AData.DayStr]);
-    Item.SubItems.Add(AData.Summury);
+    Item.SubItems.Add(AData.Summary);
     Item.Data := AData;
   end;
 end;
 
 // 기념일 삭제(단건)
 procedure TfrmMain.DeleteSpecifiedData(AData: TSpecifiedData);
+var
+  I: Integer;
+  Data: TSpecifiedData;
 begin
-      FSpecifiedDataCtrl.DeleteData(AData);
+  for I := 0 to lvSpecified.Items.Count - 1 do
+  begin
+    Data := lvSpecified.Items[I].Data;
+    if Data = AData then
+    begin
+      lvSpecified.Items.Delete(I);
+      Break;
+    end;
+  end;
+
+  FSpecifiedDataCtrl.DeleteData(AData);
 end;
 
 // 기념일 수정(갱신)
 procedure TfrmMain.UpdateSpecifiedData(AData: TSpecifiedData);
+var
+  Item: TListItem;
 begin
-      FSpecifiedDataCtrl.UpdateData(AData);
+  FSpecifiedDataCtrl.UpdateData(AData);
+
+  Item := lvSpecified.Selected;
+  Item.Caption := Format('%.2d월 %s일', [AData.Month, AData.DayStr]);
+  Item.SubItems[0] := AData.Summary;
 end;
 
 end.

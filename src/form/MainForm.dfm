@@ -19,17 +19,15 @@
   object Label5: TLabel
     Left = 8
     Top = 128
-    Width = 259
+    Width = 323
     Height = 13
-    Caption = #8251' 2'#44032#51648' '#51333#47448#51032' '#45804#47141' '#54028#51068#51012' '#49373#49457#54624' '#49688' '#51080#49845#45768#45796'.'
+    Caption = #8251' '#51020#47141', '#51020#47141#44592#45392#51068' 2'#51333#47448#51032' '#45804#47141#54028#51068#51012' '#49373#49457#54624' '#49688' '#51080#49845#45768#45796'.'
   end
   object lblBlog: TLabel
     Left = 350
     Top = 478
     Width = 119
     Height = 13
-    Hint = #48169#47928#54616#49492#49436' '#51025#50896#51032' '#44544#51060#45208' '#48320#44221#50836#52397' '#54644#51452#49464#50836'.'
-    CustomHint = BalloonHint1
     Caption = 'http://blog.hjf.pe.kr/'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
@@ -38,7 +36,7 @@
     Font.Style = [fsBold]
     ParentFont = False
     ParentShowHint = False
-    ShowHint = True
+    ShowHint = False
     OnClick = lblBlogClick
     OnMouseEnter = lblBlogMouseEnter
     OnMouseLeave = lblBlogMouseLeave
@@ -55,7 +53,7 @@
     Caption = #45380#46020' '#48512#53552
   end
   object Label2: TLabel
-    Left = 184
+    Left = 190
     Top = 152
     Width = 172
     Height = 13
@@ -268,7 +266,7 @@
     Top = 171
     Width = 469
     Height = 301
-    ActivePage = tsSpecified
+    ActivePage = tsLunar
     TabOrder = 3
     object tsLunar: TTabSheet
       Caption = #51020#47141' '#45804#47141' '#49373#49457
@@ -310,7 +308,7 @@
       object Label6: TLabel
         Left = 3
         Top = 10
-        Width = 354
+        Width = 441
         Height = 26
         Anchors = [akLeft, akTop, akRight]
         Caption = #50500#47000' '#54637#47785' '#51473' '#51020#47141#45804#47141#50640' '#54364#49884#54624' '#51068#51088' '#54805#49885#51012' '#49440#53469#54616#44256' '#45804#47141#54028#51068'  '#49373#49457' '#48260#53948#51012' '#53364#47533#54616#49464#50836'.'
@@ -387,9 +385,9 @@
       object lblSpecified: TLabel
         Left = 3
         Top = 10
-        Width = 243
+        Width = 270
         Height = 13
-        Caption = #44060#51064#51201#51064' '#44592#45392#51068#51012' '#52628#44032#54616#50668' '#45804#47141' '#54028#51068#51012' '#49373#49457
+        Caption = #44060#51064#51201#51064' '#51020#47141' '#44592#45392#51068#51012' '#52628#44032#54616#50668' '#45804#47141' '#54028#51068#51012' '#49373#49457
       end
       object lvSpecified: TListView
         Left = 4
@@ -425,6 +423,7 @@
         SortType = stText
         TabOrder = 2
         ViewStyle = vsReport
+        OnDblClick = lvSpecifiedDblClick
       end
       object btnAddSpecified: TButton
         Left = 325
@@ -470,7 +469,7 @@
     OnKeyUp = edtNextFocusKeyUp
   end
   object edtEndOfRange: TEdit
-    Left = 130
+    Left = 136
     Top = 147
     Width = 50
     Height = 21
@@ -492,11 +491,6 @@
     Caption = '&About'
     TabOrder = 4
     OnClick = btnAboutClick
-  end
-  object BalloonHint1: TBalloonHint
-    Delay = 10
-    Left = 384
-    Top = 152
   end
   object dlgSave: TSaveDialog
     Filter = 'iCalendar(iPhone ical)|*.ics'

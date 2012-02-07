@@ -107,7 +107,7 @@ begin
   WriteData('TRANSP:TRANSPARENT');
   WriteData('END:VEVENT');
 //
-//  OutputDebugString(PChar(Format('S: %d-%d-%d, L: %d-%d-%d, Summury: %s', [
+//  OutputDebugString(PChar(Format('S: %d-%d-%d, L: %d-%d-%d, Summary: %s', [
 //      AData.Solar.Year
 //    , AData.Solar.Month
 //    , AData.Solar.Day

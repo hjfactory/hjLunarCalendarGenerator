@@ -22,6 +22,13 @@ const
   SupportSolarDateStartStr = '1881-1-30';
   SupportSolarDateEndStr   = '2101-1-28';
 
+  SupportSolarDateStartYear   = 1881;
+  SupportSolarDateStartMonth  = 1;
+  SupportSolarDateStartDay    = 30;
+  SupportSolarDateEndYear     = 2101;
+  SupportSolarDateEndMonth    = 1;
+  SupportSolarDateEndDay      = 28;
+
   StandardDateDelta     = 0     // 1880-12-31까지 일자수
                           + (SupportYearStart - 1) * 365      // 연도
                           + ((SupportYearStart - 1) div 4)    // 윤달처리(Hint 2)

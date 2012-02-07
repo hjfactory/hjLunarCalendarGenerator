@@ -32,7 +32,7 @@ type
     FIndexOfMonth: Integer;   // 음력월의 인덱스(월번호랑 다름)
 
     function GetLunarDateRec(AYear: Word; AIndexOfMonth: Integer; ADay: Word): TLunarDateRec;
-    function GetSummury(ADispType: TLunarDaysDisplayType; ALunar: TLunarDateRec): string;
+    function GetSummary(ADispType: TLunarDaysDisplayType; ALunar: TLunarDateRec): string;
   protected
     procedure Initialize; override;
   public
@@ -92,11 +92,12 @@ end;
 
 procedure TLunarCalendarDataGenerator.Initialize;
 begin
+  FCalendarSource.First;
   FYear   := FStartOfRange;
   FIndexOfMonth  := 1;
 end;
 
-function TLunarCalendarDataGenerator.GetSummury(
+function TLunarCalendarDataGenerator.GetSummary(
   ADispType: TLunarDaysDisplayType; ALunar: TLunarDateRec): string;
 
 const
@@ -171,7 +172,7 @@ begin
   try
     Lunar := GetLunarDateRec(FYear, FIndexOfMonth, Source.Day);
     Solar := FLunarDateConvertor.LunarToSolar(Lunar);
-    Summary := GetSummury(Source.DisplayDaysType, Lunar);
+    Summary := GetSummary(Source.DisplayDaysType, Lunar);
 
     Result := FCalendarData.SetData(Solar, Lunar, Summary, '');
 

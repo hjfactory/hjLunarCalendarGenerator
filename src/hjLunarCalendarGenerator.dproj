@@ -67,6 +67,7 @@
 			<DCCReference Include="specified\SpecifiedDataFile.pas"/>
 			<DCCReference Include="specified\SpecifiedDataFileToIni.pas"/>
 			<DCCReference Include="common\Environment.pas"/>
+			<DCCReference Include="caldata\SpecifiedCalendarDataGenerator.pas"/>
 			<None Include="lib\LunarTableData.inc"/>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>
@@ -96,9 +97,9 @@
 					</Parameters>
 					<VersionInfo>
 						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
-						<VersionInfo Name="AutoIncBuild">False</VersionInfo>
-						<VersionInfo Name="MajorVer">1</VersionInfo>
-						<VersionInfo Name="MinorVer">0</VersionInfo>
+						<VersionInfo Name="AutoIncBuild">True</VersionInfo>
+						<VersionInfo Name="MajorVer">0</VersionInfo>
+						<VersionInfo Name="MinorVer">9</VersionInfo>
 						<VersionInfo Name="Release">0</VersionInfo>
 						<VersionInfo Name="Build">0</VersionInfo>
 						<VersionInfo Name="Debug">False</VersionInfo>
@@ -112,7 +113,7 @@
 					<VersionInfoKeys>
 						<VersionInfoKeys Name="CompanyName">hjFactory</VersionInfoKeys>
 						<VersionInfoKeys Name="FileDescription">Lunar Calendar Generatro</VersionInfoKeys>
-						<VersionInfoKeys Name="FileVersion">1.0.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="FileVersion">0.9.0.0</VersionInfoKeys>
 						<VersionInfoKeys Name="InternalName"/>
 						<VersionInfoKeys Name="LegalCopyright"/>
 						<VersionInfoKeys Name="LegalTrademarks"/>

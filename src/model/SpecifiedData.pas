@@ -11,21 +11,21 @@ type
     FID: string;
     FMonth: Word;
     FDay: Word;
-    FSummury: string;
+    FSummary: string;
 
     function GetDayStr: string;
     function GetKey: string;
   public
     constructor Create; overload;
     constructor Create(const AID: string; const AMonth, ADay: Word;
-      const ASummury: string); overload;
+      const ASummary: string); overload;
 
     property Key: string read GetKey;
     property ID: string read FID write FID;
     property Month: Word read FMonth write FMonth;
     property Day: Word read FDay write FDay;
     property DayStr: string read GetDayStr;
-    property Summury: string read FSummury write FSummury;
+    property Summary: string read FSummary write FSummary;
   end;
 
   TSpecifiedDatas = class(TObject)
@@ -55,7 +55,7 @@ type
     destructor Destroy; override;
 
     function AppendData(const AMonth, ADay: Word;
-      const ASummury: string): TSpecifiedData; overload;
+      const ASummary: string): TSpecifiedData; overload;
     function AppendData(AData: TSpecifiedData): TSpecifiedData; overload;
     procedure DeleteData(Index: Integer); overload;
     procedure DeleteData(AData: TSpecifiedData); overload;
@@ -93,12 +93,12 @@ begin
 end;
 
 constructor TSpecifiedData.Create(const AID: string; const AMonth, ADay: Word;
-  const ASummury: string);
+  const ASummary: string);
 begin
   FID := AID;
   FMonth := AMonth;
   FDay := ADay;
-  FSummury := ASummury;
+  FSummary := ASummary;
 end;
 
 function TSpecifiedData.GetKey: string;
@@ -173,9 +173,9 @@ begin
 end;
 
 function TSpecifiedDataList.AppendData(const AMonth, ADay: Word;
-  const ASummury: string): TSpecifiedData;
+  const ASummary: string): TSpecifiedData;
 begin
-  Result := TSpecifiedData.Create(RandomString, AMonth, ADay, ASummury);
+  Result := TSpecifiedData.Create(RandomString, AMonth, ADay, ASummary);
 
   AppendData(Result);
 end;

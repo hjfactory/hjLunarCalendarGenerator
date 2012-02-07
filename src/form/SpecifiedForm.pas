@@ -18,8 +18,8 @@ type
     lblLunarDate: TLabel;
     edtLunarMonth: TEdit;
     edtLunarDay: TEdit;
-    edtSummury: TEdit;
-    lblSummury: TLabel;
+    edtSummary: TEdit;
+    lblSummary: TLabel;
     btnSave: TButton;
     btnCancel: TButton;
     lblDescription: TLabel;
@@ -58,19 +58,19 @@ procedure TfrmSpecified.FormShow(Sender: TObject);
 begin
   if Assigned(FData) then
   begin
-    edtLunarMonth.Text  := IntToStr(FData.Month);
+    edtLunarMonth.Text  := Format('%.2d', [FData.Month]);
     edtLunarDay.Text    := FData.DayStr;
     chkLunarLastDay.Checked := FData.Day = LunarLastDay;
-    edtSummury.Text     := FData.Summury;
+    edtSummary.Text     := FData.Summary;
   end;
 end;
 
 procedure TfrmSpecified.btnCancelClick(Sender: TObject);
 begin
   if    Assigned(FData)
-    and ((edtLunarMonth.Text <> IntToStr(FData.Month))
-    or  (edtLunarDay.Text <> IntToStr(FData.Day))
-    or  (edtSummury.Text <> FData.Summury)) then
+    and ((StrToIntDef(edtLunarMonth.Text, 0) <> FData.Month)
+    or  (StrToIntDef(edtLunarDay.Text, 99) <> FData.Day)
+    or  (edtSummary.Text <> FData.Summary)) then
   begin
     if Application.MessageBox(
       PChar('변경된 내용이 있습니다.'#13#10 +
@@ -89,8 +89,8 @@ end;
 procedure TfrmSpecified.btnDeleteClick(Sender: TObject);
 begin
   if Application.MessageBox(
-    PChar(Format('기념일 ''%s(%d월 %d일)''을'#13#10 +
-          '삭제하시겠습니까?', [FData.Summury, FData.Month, FData.Day])),
+    PChar(Format('기념일 ''%s(%d월 %s일)''을'#13#10 +
+          '삭제하시겠습니까?', [FData.Summary, FData.Month, FData.DayStr])),
     PChar('hjLunarCalendarGenerator'),
     MB_ICONQUESTION OR MB_YESNO) = ID_NO then
   begin
@@ -98,29 +98,28 @@ begin
   end;
 
   ModalResult := smrDelete;
-  Close;
+  CloseModal;
 end;
 
 procedure TfrmSpecified.btnSaveClick(Sender: TObject);
 var
   Day: Integer;
 begin
-  Day := IfThen(edtLUnarDay.Text = LunarLastDayStr, LunarLastDay, StrToInt(edtLUnarDay.Text));
-
-  Close;
+  Day := IfThen(edtLUnarDay.Text = LunarLastDayStr, LunarLastDay, StrToIntDef(edtLUnarDay.Text, LunarLastDay));
 
   if not Assigned(FData) then
   begin
-    FData := TSpecifiedData.Create('', StrToInt(edtLunarMonth.Text), Day, edtSummury.Text);
+    FData := TSpecifiedData.Create('', StrToInt(edtLunarMonth.Text), Day, edtSummary.Text);
     ModalResult := smrSave;
   end
   else
   begin
     FData.Month := StrToInt(edtLunarMonth.Text);
     FData.Day   := Day;
-    FData.Summury := edtSummury.Text;
+    FData.Summary := edtSummary.Text;
     ModalResult := smrUpdate;
   end;
+  CloseModal;
 end;
 
 procedure TfrmSpecified.chkLunarLastDayClick(Sender: TObject);

@@ -24,6 +24,7 @@ type
 
     property Count: Integer read GetCount;
     property Items[Index: Integer]: TSpecifiedData read Get; default;
+    property DataList: TSpecifiedDataList read FDataList;
   end;
 
 implementation
@@ -84,8 +85,9 @@ end;
 
 function TSpecifiedDateController.DeleteData(AData: TSpecifiedData): Boolean;
 begin
-  FDataList.DeleteData(AData);
-  Result := FDataFile.Delete(AData);
+  if FDataFile.Delete(AData) then
+    FDataList.DeleteData(AData);
+  Result := True;
 end;
 
 end.

@@ -18,7 +18,8 @@ uses
   SpecifiedData in 'model\SpecifiedData.pas',
   SpecifiedDataFile in 'specified\SpecifiedDataFile.pas',
   SpecifiedDataFileToIni in 'specified\SpecifiedDataFileToIni.pas',
-  Environment in 'common\Environment.pas';
+  Environment in 'common\Environment.pas',
+  SpecifiedCalendarDataGenerator in 'caldata\SpecifiedCalendarDataGenerator.pas';
 
 {$R *.res}
 

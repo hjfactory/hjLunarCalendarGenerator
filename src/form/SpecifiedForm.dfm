@@ -26,7 +26,7 @@ object frmSpecified: TfrmSpecified
     Margins.Bottom = 2
     Caption = #51020#47141#51068#51088
   end
-  object lblSummury: TLabel
+  object lblSummary: TLabel
     Left = 6
     Top = 70
     Width = 60
@@ -101,7 +101,7 @@ object frmSpecified: TfrmSpecified
     OnKeyPress = edtOnlyNumericKeyPress
     OnKeyUp = edtNextFocusKeyUp
   end
-  object edtSummury: TEdit
+  object edtSummary: TEdit
     Left = 70
     Top = 67
     Width = 270

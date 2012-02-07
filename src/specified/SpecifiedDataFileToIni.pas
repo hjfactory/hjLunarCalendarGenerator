@@ -10,6 +10,8 @@ type
   TSpecifiedDataFileToIni = class(TSpecifiedDataFile)
   private
     FIniFile: TIniFile;
+
+    function SaveData(AData: TSpecifiedData): Boolean;
   public
     constructor Create(APath: string);
     destructor Destroy; override;
@@ -42,23 +44,28 @@ begin
   inherited;
 end;
 
-function TSpecifiedDataFileToIni.Append(AData: TSpecifiedData): Boolean;
+function TSpecifiedDataFileToIni.SaveData(AData: TSpecifiedData): Boolean;
 begin
   FIniFile.WriteInteger(AData.ID, 'Month',   AData.Month);
   FIniFile.WriteInteger(AData.ID, 'Day',     AData.Day);
-  FIniFile.WriteString(AData.ID, 'Summury', AData.Summury);
+  FIniFile.WriteString(AData.ID, 'Summary', AData.Summary);
 
   Result := True;
 end;
 
+function TSpecifiedDataFileToIni.Append(AData: TSpecifiedData): Boolean;
+begin
+  Result := SaveData(AData);
+end;
+
 function TSpecifiedDataFileToIni.Update(AData: TSpecifiedData): Boolean;
 begin
-
+  Result := SaveData(AData);
 end;
 
 function TSpecifiedDataFileToIni.Delete(AData: TSpecifiedData): Boolean;
 begin
-
+  FIniFile.EraseSection(AData.ID);
 end;
 
 procedure TSpecifiedDataFileToIni.Load(ADataList: TSpecifiedDataList);
@@ -77,7 +84,7 @@ begin
       Data.ID := StrList[I];
       Data.Month    := FIniFile.ReadInteger(Data.ID, 'Month', 1);
       Data.Day      := FIniFile.ReadInteger(Data.ID, 'Day', 1);
-      Data.Summury  := FIniFile.ReadString(Data.ID, 'Summury', '');
+      Data.Summary  := FIniFile.ReadString(Data.ID, 'Summary', '');
 
       ADataList.AppendData(Data);
     end;
