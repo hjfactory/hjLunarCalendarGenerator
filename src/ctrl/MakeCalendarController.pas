@@ -21,7 +21,8 @@ type
     function LunarToSolar(ADate: TLunarDateRec): TSolarDateRec;
 
     function MakeLunarCalendar(AStartOfRange, AEndOfRange: Word; ADisplayType: TLunarDaysDisplayType; APath: string): Boolean;
-    function MakeSpecifiedCalendar(AStartOfRange, AEndOfRange: Word; ADataList: TSpecifiedDataList; APath: string): Boolean;
+    function MakeSpecifiedCalendar(AStartOfRange, AEndOfRange: Word;
+      ADispDate: Boolean; ADataList: TSpecifiedDataList; APath: string): Boolean;
 
     function SupportRangeYear(AYear: Word; var Msg: string): boolean;
   end;
@@ -136,13 +137,13 @@ begin
 end;
 
 function TMakeCalendarController.MakeSpecifiedCalendar(AStartOfRange, AEndOfRange: Word;
-  ADataList: TSpecifiedDataList; APath: string): Boolean;
+  ADispDate: Boolean; ADataList: TSpecifiedDataList; APath: string): Boolean;
 var
   Source: TSpecifiedCalendarSource;
   Generator: TSpecifiedCalendarDataGenerator;
   Saver: TCalendarSaverToICS;
 begin
-  Source    := TSpecifiedCalendarSource.Create(ADataList);
+  Source    := TSpecifiedCalendarSource.Create(ADispDate, ADataList);
   Generator := TSpecifiedCalendarDataGenerator.Create(Source, AStartOfRange, AendOfRange);
   Saver     := TCalendarSaverToICS.Create(APath);
   try

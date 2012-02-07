@@ -66,6 +66,7 @@ end;
 function TSpecifiedDataFileToIni.Delete(AData: TSpecifiedData): Boolean;
 begin
   FIniFile.EraseSection(AData.ID);
+  Result := True;
 end;
 
 procedure TSpecifiedDataFileToIni.Load(ADataList: TSpecifiedDataList);

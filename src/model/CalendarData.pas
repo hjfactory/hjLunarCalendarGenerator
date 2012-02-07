@@ -12,12 +12,12 @@ type
     FLunarDate: TLunarDateRec;
     FDescription: string;
     FSummary: string;
-    FUID: string;
+//    FUID: string;
     FCreated: TDateTime;
   public
     function SetData(ASolarDate: TSolarDateRec; ALunarDate: TLunarDateRec; ASummary, ADescription: string): TCalendarData;
 
-    property UID: string read FUID;
+//    property UID: string read FUID;
     property Solar: TSolarDateRec read FSolarDate;
     property Lunar: TLunarDateRec read FLunarDate;
     property Summary: string read FSummary;

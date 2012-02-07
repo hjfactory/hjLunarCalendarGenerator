@@ -36,6 +36,7 @@ type
     procedure FormShow(Sender: TObject);
     procedure edtNextFocusKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
+    procedure edtSummaryKeyPress(Sender: TObject; var Key: Char);
   private
     FData: TSpecifiedData;
     FDataCtrl: TSpecifiedDateController;
@@ -102,9 +103,23 @@ begin
 end;
 
 procedure TfrmSpecified.btnSaveClick(Sender: TObject);
+  function InvalidValueCheck(AEdit: TEdit; ATitle: string): Boolean;
+  begin
+    Result := True;
+    if Trim(AEdit.Text) = '' then
+    begin
+      ShowMessage(Format('''%s''을 입력하세요.', [ATitle]));
+      AEdit.SetFocus;
+      Result := False;
+    end;
+  end;
 var
   Day: Integer;
 begin
+  if not InvalidValueCheck(edtLunarMonth, '음력일자(월)') then Exit;
+  if not InvalidValueCheck(edtLunarDay,   '음력일자(일)') then Exit;
+  if not InvalidValueCheck(edtSummary,    '기념일내용') then Exit;
+
   Day := IfThen(edtLUnarDay.Text = LunarLastDayStr, LunarLastDay, StrToIntDef(edtLUnarDay.Text, LunarLastDay));
 
   if not Assigned(FData) then
@@ -146,7 +161,8 @@ end;
 procedure TfrmSpecified.edtNextFocusKeyUp(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-  if Length(TEdit(Sender).Text) = TEdit(Sender).MaxLength then
+  // Tab(9)과 Shift(16)이외의 키에 동작하도록
+  if not (Key in [9, 16]) and (Length(TEdit(Sender).Text) = TEdit(Sender).MaxLength) then
   begin
     Key := 0;
     SelectNext(Sender as TWinControl, True, True);
@@ -155,8 +171,17 @@ end;
 
 procedure TfrmSpecified.edtOnlyNumericKeyPress(Sender: TObject; var Key: Char);
 begin
-  if not (CharInSet(Key, ['0'..'9',#25,#8,#13])) then
+  if not (CharInSet(Key, ['0'..'9',#25, #8, #13])) then
     Key := #0;
+end;
+
+procedure TfrmSpecified.edtSummaryKeyPress(Sender: TObject; var Key: Char);
+begin
+  if Key = #13 then
+  begin
+    Key := #0;
+    btnSave.Click;
+  end;
 end;
 
 end.

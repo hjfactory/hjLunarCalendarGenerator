@@ -96,7 +96,8 @@ begin
   WriteData('DTSTART;VALUE=DATE:' + GetDateFormat(AData.Solar.Year, AData.Solar.Month, AData.Solar.Day));
   WriteData('DTEND;VALUE=DATE:' + GetNextDayDateFormat(AData.Solar.Year, AData.Solar.Month, AData.Solar.Day));
 //  WriteData('RRULE:FREQ=WEEKLY;BYDAY=MO');
-//  WriteData('UID:egqsuskb0abkc5is1o9airk6qo@google.com');
+//  if Trim(AData.UID) <> '' then
+//    WriteData('UID:' + AData.UID);
   WriteData('CREATED:' + FormatDateTime('YYYYMMDD''T''HHNNSS', AData.Created));
   WriteData('DESCRIPTION:');
   WriteData('LAST-MODIFIED:'+ FormatDateTime('YYYYMMDD''T''HHNNSS', AData.Created));

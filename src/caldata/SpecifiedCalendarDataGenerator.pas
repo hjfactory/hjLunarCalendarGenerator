@@ -12,16 +12,19 @@ type
   TSpecifiedCalendarSource = class(TCalendarSource)
   private
     FIndex: Integer;
+    FDisplayDate: Boolean;
     FDataList: TSpecifiedDataList;
     function GetDay: Word;
     function GetMonth: Word;
     function GetSummary: string;
   public
-    constructor Create(ADataList: TSpecifiedDataList);
+    constructor Create(ADispDate: Boolean; ADataList: TSpecifiedDataList);
 
     procedure First; override;
     procedure Next; override;
     function HasNext: Boolean; override;
+
+    property DisplayDate: Boolean read FDisplayDate;
 
     property Month: Word read GetMonth;
     property Day: Word read GetDay;
@@ -42,8 +45,9 @@ implementation
 
 { TSpecifiedCalendarSource }
 
-constructor TSpecifiedCalendarSource.Create(ADataList: TSpecifiedDataList);
+constructor TSpecifiedCalendarSource.Create(ADispDate: Boolean; ADataList: TSpecifiedDataList);
 begin
+  FDisplayDate := ADispDate;
   FDataList := ADataList;
 end;
 
@@ -115,6 +119,9 @@ begin
     Lunar := DateRec(FYear, Source.Month, Day, False);
     Solar := FLunarDateConvertor.LunarToSolar(Lunar);
     Summary := Source.Summary;
+    if Source.DisplayDate then
+      Summary := Format('(%d/%d)', [Lunar.Month, Lunar.Day]) + Summary;
+
 
     Result := FCalendarData.SetData(Solar, Lunar, Summary, '');
 

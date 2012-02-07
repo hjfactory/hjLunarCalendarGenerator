@@ -54,6 +54,7 @@ type
     Label2: TLabel;
     dlgSave: TSaveDialog;
     btnAbout: TButton;
+    chkSpecifiedDispDate: TCheckBox;
     procedure btnLunarToSolarClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -143,7 +144,6 @@ var
   Year, Month, Day: Word;
   V1, V2, V3, V4: Word;
 begin
-
   if GetApplicationVersion(V1, V2, V3, V4) then
     Caption := Caption + Format('(ver.%d.%d.%d)', [V1, V2, V3]);
 
@@ -347,7 +347,7 @@ begin
     end;
 
     try
-      if FMakeCalendarCtrl.MakeSpecifiedCalendar(StartOfRange, EndOfRange, FSpecifiedDataCtrl.DataList, dlgSave.FileName) then
+      if FMakeCalendarCtrl.MakeSpecifiedCalendar(StartOfRange, EndOfRange, chkSpecifiedDispDate.Checked, FSpecifiedDataCtrl.DataList, dlgSave.FileName) then
         ShowMessage('달력파일 생성을 완료하였습니다.');
     except on E: Exception do
       ShowMessage('달력파일 생성 중 오류가 발생했습니다.'#13#10 + Format('(오류내용: %s)', [E.Message]));

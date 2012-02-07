@@ -112,6 +112,7 @@ object frmSpecified: TfrmSpecified
     Margins.Bottom = 2
     ImeName = 'Microsoft Office IME 2007'
     TabOrder = 2
+    OnKeyPress = edtSummaryKeyPress
   end
   object btnSave: TButton
     Left = 220

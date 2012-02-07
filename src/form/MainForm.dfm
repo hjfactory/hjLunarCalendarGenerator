@@ -266,7 +266,7 @@
     Top = 171
     Width = 469
     Height = 301
-    ActivePage = tsLunar
+    ActivePage = tsSpecified
     TabOrder = 3
     object tsLunar: TTabSheet
       Caption = #51020#47141' '#45804#47141' '#49373#49457
@@ -450,6 +450,16 @@
         Caption = #45804#47141#54028#51068' '#49373#49457
         TabOrder = 3
         OnClick = btnMakeSpecifiedCalendarClick
+      end
+      object chkSpecifiedDispDate: TCheckBox
+        Left = 3
+        Top = 249
+        Width = 270
+        Height = 17
+        Caption = #44592#45392#51068' '#50526#50640' '#51068#51088' '#54364#49884'('#50696'> (12/12)'#51020#47141#49373#51068')'
+        Checked = True
+        State = cbChecked
+        TabOrder = 4
       end
     end
   end
