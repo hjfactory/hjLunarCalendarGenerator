@@ -63,6 +63,10 @@ begin
     edtLunarDay.Text    := FData.DayStr;
     chkLunarLastDay.Checked := FData.Day = LunarLastDay;
     edtSummary.Text     := FData.Summary;
+  end
+  else
+  begin
+    btnDelete.Enabled := False;
   end;
 end;
 

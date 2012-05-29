@@ -475,6 +475,9 @@ var
   I: Integer;
   Data: TSpecifiedData;
 begin
+  if not Assigned(AData) then
+    Exit;
+
   for I := 0 to lvSpecified.Items.Count - 1 do
   begin
     Data := lvSpecified.Items[I].Data;

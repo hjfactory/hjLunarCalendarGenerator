@@ -270,6 +270,10 @@
     TabOrder = 3
     object tsLunar: TTabSheet
       Caption = #51020#47141' '#45804#47141' '#49373#49457
+      ExplicitLeft = 0
+      ExplicitTop = 0
+      ExplicitWidth = 0
+      ExplicitHeight = 0
       DesignSize = (
         461
         273)
@@ -308,7 +312,7 @@
       object Label6: TLabel
         Left = 3
         Top = 10
-        Width = 441
+        Width = 432
         Height = 26
         Anchors = [akLeft, akTop, akRight]
         Caption = #50500#47000' '#54637#47785' '#51473' '#51020#47141#45804#47141#50640' '#54364#49884#54624' '#51068#51088' '#54805#49885#51012' '#49440#53469#54616#44256' '#45804#47141#54028#51068'  '#49373#49457' '#48260#53948#51012' '#53364#47533#54616#49464#50836'.'
