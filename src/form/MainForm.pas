@@ -74,7 +74,10 @@ type
     procedure lvSpecifiedDblClick(Sender: TObject);
   private
     { Private declarations }
+    // 달력생성 제어객체
     FMakeCalendarCtrl: TMakeCalendarController;
+
+    // 기념일 데이터 제어객체
     FSpecifiedDataCtrl: TSpecifiedDateController;
 
     // 음력달력 생성
