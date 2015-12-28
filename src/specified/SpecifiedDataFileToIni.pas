@@ -3,7 +3,7 @@ unit SpecifiedDataFileToIni;
 interface
 
 uses
-  IniFiles, SysUtils, Forms,
+  IniFiles, SysUtils,
   SpecifiedData, SpecifiedDataFile;
 
 type
@@ -26,7 +26,7 @@ type
 implementation
 
 uses
-  Classes;
+  Classes, System.IOUtils;
 
 { TSpecifiedDataSaverToIni }
 
@@ -34,7 +34,7 @@ constructor TSpecifiedDataFileToIni.Create(APath: string);
 begin
   inherited;
 
-  FIniFile := TIniFile.Create(ExtractFilePath(Application.ExeName) +  FFilePath);
+  FIniFile := TIniFile.Create(TPath.Combine(TPath.GetLibraryPath, FFilePath));
 end;
 
 destructor TSpecifiedDataFileToIni.Destroy;

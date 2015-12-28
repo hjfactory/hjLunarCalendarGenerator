@@ -15,7 +15,7 @@ program hjLunarCalendarGeneratorTests;
 {$ENDIF}
 
 uses
-  ExceptionLog,
+//  ExceptionLog,
   Forms,
   TestFramework,
   GUITestRunner,
